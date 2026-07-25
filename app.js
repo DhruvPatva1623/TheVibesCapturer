@@ -392,9 +392,9 @@ window.closeLightbox = function () {
   const lb = document.getElementById("lightbox");
   lb.classList.remove("open");
   document.body.style.overflow = "";
-  // Pause any playing video
-  const vid = lb.querySelector("video");
-  if (vid) vid.pause();
+  // Clear innerHTML to destroy iframes and video tags so sound stops
+  const media = document.getElementById("lightbox-media");
+  if (media) media.innerHTML = "";
 };
 
 window.closeLightboxOnBg = function (e) {
