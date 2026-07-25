@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TheVibesCapturer — Just Capture Every Moments</title>
+  <meta name="description" content="TheVibesCapturer — Professional Video Editor & Cinematographer. Wedding Films, Brand Commercials, Photography. Based in India, available worldwide." />
+  <meta name="author" content="TheVibesCapturer" />
+  <meta property="og:title" content="TheVibesCapturer — Just Capture Every Moments" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/TvC Website Logo.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/png" href="assets/TvC Website Logo.png" />
+  <link rel="stylesheet" href="style.css?v=5" />
+  <script>
+    if (localStorage.getItem('tvc_theme') === 'light') {
+      document.documentElement.classList.add('light-theme');
+    }
+  </script>
+</head>
+<body class="loading">
+  <!-- Studio Light Switch -->
+  <div class="light-switch" onclick="window.toggleStudioLights && window.toggleStudioLights(); this.classList.toggle('pulled');">
+    <div class="light-rope"></div>
+    <div class="light-handle"></div>
+  </div>
+
+  <!-- ═══ CUSTOM CURSOR ═══ -->
+  <div id="cursor" aria-hidden="true">
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+    <div class="cursor-aperture">
+      <svg viewBox="0 0 40 40" width="40" height="40">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="20" cy="20" r="10" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>
+        <line x1="20" y1="2" x2="20" y2="8" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
+        <line x1="20" y1="32" x2="20" y2="38" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
+        <line x1="2" y1="20" x2="8" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
+        <line x1="32" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
+        <circle cx="20" cy="20" r="2" fill="currentColor"/>
+      </svg>
+    </div>
+  </div>
+
+    <!-- ═══ CINEMATIC HUD & OVERLAYS ═══ -->
+    <div class="film-grain"></div>
+    <div class="safe-guides">
+      <div class="guide-h"></div>
+      <div class="guide-v"></div>
+    </div>
+    
+    <div class="cinematic-hud">
+      <div class="hud-top-left">
+        <span class="rec-dot"></span> REC
+      </div>
+      <div class="hud-top-right">
+        ISO 800 <span class="hud-sep">|</span> 50mm f/1.4
+      </div>
+      <div class="hud-bottom-right">
+        24 FPS <span class="hud-sep">|</span> 4K DCI
+      </div>
+    </div>
+    
+    <div class="mobile-nav" id="mobile-nav">
+      <div class="mobile-nav-inner">
+        <a href="#gallery" onclick="toggleMobileNav()">Work</a>
+        <a href="#reel" onclick="toggleMobileNav()">Reel</a>
+        <a href="#services" onclick="toggleMobileNav()">Services</a>
+        <a href="#contact" onclick="toggleMobileNav()">Contact</a>
+        <a href="fields.html" class="nav-highlight">Fields</a>
+      </div>
+    </div>
+
+  <!-- ═══ LOADER ═══ -->
+  <div id="loader" aria-label="Loading" role="status">
+    <div class="loader-inner">
+      <div class="loader-aperture" aria-hidden="true">
+        <svg viewBox="0 0 200 200" width="120" height="120">
+          <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(200,40,42,0.15)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(245,213,128,0.12)" stroke-width="1"/>
+          <g class="loader-blades">
+            <path d="M100,100 L155,35 A65,65 0 0,0 35,55 Z" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+            <path d="M100,100 L165,95 A65,65 0 0,0 155,35 Z" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+            <path d="M100,100 L155,165 A65,65 0 0,0 165,95 Z" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+            <path d="M100,100 L95,165 A65,65 0 0,0 155,165 Z" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+            <path d="M100,100 L35,145 A65,65 0 0,0 95,165 Z" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+            <path d="M100,100 L35,55 A65,65 0 0,0 35,145 Z" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          </g>
+          <circle cx="100" cy="100" r="4" fill="#C8282A"/>
+        </svg>
+      </div>
+      <div class="loader-brand">TvC</div>
+      <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+      <div class="loader-percent"><span id="loader-num">0</span>%</div>
+    </div>
+  </div>
+
+  <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="#home" class="nav-brand" id="nav-brand">
+      <img src="assets/TvC Website Logo.png" alt="TheVibesCapturer Logo" width="56" height="56" onerror="this.src='assets/TVC_logo.jpg'" style="border-radius:10px;box-shadow:0 0 20px rgba(200,40,42,0.65), 0 0 40px rgba(200,40,42,0.35); transition: transform 0.3s;" />
+    </a>
+
+    <ul class="nav-links" id="nav-links" role="list">
+      <li><a href="#home" class="nav-link active" data-nav>Home</a></li>
+      <li><a href="#gallery" class="nav-link" data-nav>Work</a></li>
+      <li><a href="#reel" class="nav-link" data-nav>Reel</a></li>
+      <li><a href="#services" class="nav-link" data-nav>Services</a></li>
+      <li><a href="fields.html" class="nav-link nav-link--gold" data-nav>Fields</a></li>
+      <li><a href="#contact" class="nav-link" data-nav>Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Camera clicker theme changer -->
+      <button class="theme-btn magnetic" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle Theme" title="Switch Theme">
+        <svg viewBox="0 0 24 24">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </button>
+      <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()" aria-label="Admin"><span class="admin-dot"></span>Admin</button>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile nav -->
+  <div class="mobile-nav" id="mobile-nav" role="dialog" aria-modal="true">
+    <button class="mobile-close" onclick="toggleMobileNav()" aria-label="Close">✕</button>
+    <nav>
+      <a href="#home" onclick="toggleMobileNav()">Home</a>
+      <a href="#gallery" onclick="toggleMobileNav()">Work</a>
+      <a href="#reel" onclick="toggleMobileNav()">Reel</a>
+      <a href="#services" onclick="toggleMobileNav()">Services</a>
+      <a href="fields.html">Fields</a>
+      <a href="#contact" onclick="toggleMobileNav()">Contact</a>
+    </nav>
+  </div>
+
+  <!-- ═══ HERO ═══ -->
+  <section id="home" class="hero" aria-label="Hero">
+    <!-- Canvas for 3D particles -->
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+    <!-- Film grain -->
+    <canvas id="grain-canvas" class="grain" aria-hidden="true"></canvas>
+
+    <!-- Vignette -->
+    <div class="vignette" aria-hidden="true"></div>
+
+    <!-- Lens flare follows mouse -->
+    <div class="lens-flare" id="lens-flare" aria-hidden="true"></div>
+
+    <!-- Aperture decorative -->
+    <div class="hero-aperture" aria-hidden="true">
+      <div class="ap-ring ap-ring-1"></div>
+      <div class="ap-ring ap-ring-2"></div>
+      <div class="ap-ring ap-ring-3"></div>
+      <div class="ap-blades">
+        <div class="ap-blade"></div>
+        <div class="ap-blade"></div>
+        <div class="ap-blade"></div>
+        <div class="ap-blade"></div>
+        <div class="ap-blade"></div>
+        <div class="ap-blade"></div>
+      </div>
+      <div class="ap-center"></div>
+    </div>
+
+
+
+    <!-- Main hero content -->
+    <div class="hero-content hero-content--centered">
+      <div class="hero-text-wrap" data-reveal="slide-up">
+        <div class="hero-label">
+          <span class="hl-line"></span>
+          <span class="hl-text">CINEMATOGRAPHER • VIDEO EDITOR</span>
+          <span class="hl-line"></span>
+        </div>
+        <h1 class="hero-title glitch" data-text="The Vibes Capturer">The Vibes Capturer</h1>
+        <p class="hero-subtitle">Sees What Others Miss.</p>
+        
+        <div class="hero-tagline">
+          JUST CAPTURE EVERY MOMENTS
+        </div>
+      </div>
+
+      <div class="hero-cta" data-reveal>
+        <a href="#gallery" class="btn-primary magnetic">
+          <span>View My Work</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#contact" class="btn-ghost magnetic">
+          <span>Get In Touch</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-line"><div class="scroll-line-inner"></div></div>
+    </div>
+  </section>
+
+  <!-- ═══ MARQUEE ═══ -->
+  <div class="marquee-section" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Video Editing</span><span class="marquee-dot">●</span>
+      <span>Cinematography</span><span class="marquee-dot">●</span>
+      <span>Color Grading</span><span class="marquee-dot">●</span>
+      <span>Wedding Films</span><span class="marquee-dot">●</span>
+      <span>Brand Commercials</span><span class="marquee-dot">●</span>
+      <span>Short Films</span><span class="marquee-dot">●</span>
+      <span>Portrait Photography</span><span class="marquee-dot">●</span>
+      <span>Social Media Reels</span><span class="marquee-dot">●</span>
+      <!-- Duplicate for seamless loop -->
+      <span>Video Editing</span><span class="marquee-dot">●</span>
+      <span>Cinematography</span><span class="marquee-dot">●</span>
+      <span>Color Grading</span><span class="marquee-dot">●</span>
+      <span>Wedding Films</span><span class="marquee-dot">●</span>
+      <span>Brand Commercials</span><span class="marquee-dot">●</span>
+      <span>Short Films</span><span class="marquee-dot">●</span>
+      <span>Portrait Photography</span><span class="marquee-dot">●</span>
+      <span>Social Media Reels</span><span class="marquee-dot">●</span>
+    </div>
+  </div>
+
+  <!-- Stats bottom bar -->
+  <div class="hero-stats-bar">
+    <div class="hstat">
+      <div class="hstat-top">
+        <span class="hstat-num" data-count="50">0</span><span class="hstat-unit">+</span>
+      </div>
+      <span class="hstat-label">Projects</span>
+    </div>
+    <div class="hstat-divider"></div>
+    <div class="hstat">
+      <div class="hstat-top">
+        <span class="hstat-num" data-count="30">0</span><span class="hstat-unit">+</span>
+      </div>
+      <span class="hstat-label">Clients</span>
+    </div>
+    <div class="hstat-divider"></div>
+    <div class="hstat">
+      <div class="hstat-top">
+        <span class="hstat-num">3</span><span class="hstat-unit">+</span>
+      </div>
+      <span class="hstat-label">Years Exp.</span>
+    </div>
+    <div class="hstat-divider"></div>
+    <div class="hstat hstat--fields" onclick="window.location='fields.html'" style="cursor:pointer" title="View fields">
+      <div class="hstat-top">
+        <span class="hstat-num">10</span><span class="hstat-unit">+</span>
+      </div>
+      <span class="hstat-label">Fields ↗</span>
+    </div>
+  </div>
+
+  <!-- Film strip divider -->
+  <div class="film-strip-divider" aria-hidden="true">
+    <div class="film-strip-track" id="film-strip-1"></div>
+  </div>
+
+  <!-- ═══ ABOUT ME (STORYTELLING) ═══ -->
+  <section id="about" class="section about-section">
+    <div class="container">
+      <div class="section-head" data-reveal="slide-left">
+        <div class="section-tag">/ INT. STUDIO — DAY</div>
+        <h2 class="section-title">The<br><em>Story</em></h2>
+      </div>
+      
+      <div class="script-scenes">
+        <div class="script-scene" data-reveal="slide-right">
+          <h4 class="scene-heading">SCENE 01 — THE BEGINNING</h4>
+          <p class="scene-action">The camera pans across a dark room lit only by the glow of a monitor. A young creative discovers that editing isn't just about cutting clips—it's about manipulating time and emotion.</p>
+        </div>
+        <div class="script-scene" data-reveal="slide-right" data-delay="100">
+          <h4 class="scene-heading">SCENE 02 — LEARNING</h4>
+          <p class="scene-action">Years of obsessing over keyframes, color science, and cinematic lighting. Every mistake is a lesson in storytelling. The transition from amateur to obsessed professional happens in the blink of an eye.</p>
+        </div>
+        <div class="script-scene" data-reveal="slide-right" data-delay="200">
+          <h4 class="scene-heading">SCENE 03 — CREATING</h4>
+          <p class="scene-action">Now, operating professional cinema cameras and coloring in DaVinci Resolve. Turning raw, flat footage into Hollywood-style visuals that demand attention and evoke deep emotion.</p>
+        </div>
+        <div class="script-scene" data-reveal="slide-right" data-delay="300">
+          <h4 class="scene-heading">SCENE 04 — FUTURE VISION</h4>
+          <p class="scene-action">The screen fades to black. But the story is just beginning. The ultimate goal? To direct and shoot visual masterpieces that redefine modern digital storytelling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Film strip divider -->
+  <div class="film-strip-divider" aria-hidden="true">
+    <div class="film-strip-track" id="film-strip-1-2"></div>
+  </div>
+
+  <!-- ═══ GALLERY / WORK ═══ -->
+  <section id="gallery" class="section gallery-section">
+    <div class="section-bg-text" aria-hidden="true" data-parallax-text>CAPTURE</div>
+    <div class="container">
+      <div class="section-head" data-reveal="slide-left">
+        <div class="section-tag">/ 01 — Work</div>
+        <h2 class="section-title">Selected<br><em>Work</em></h2>
+        <p class="section-sub">A curated selection of visual stories — from lens to screen.</p>
+      </div>
+
+      <div class="gallery-filters" id="gallery-filters" data-reveal="slide-right">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="photo">Photos</button>
+        <button class="filter-pill" data-filter="video">Videos</button>
+        <button class="filter-pill" data-filter="edited">Edits</button>
+      </div>
+
+      <div class="gallery-grid" id="gallery-grid" role="list">
+        <div class="gallery-empty" id="gallery-empty">
+          <div class="gallery-empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="48" height="48">
+              <circle cx="12" cy="12" r="3"/><path d="M20 6H17.5L16 4H8L6.5 6H4C2.9 6 2 6.9 2 8v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2Z"/>
+            </svg>
+          </div>
+          <p>Your work will appear here.</p>
+          <span>Login as admin to upload.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline keyframe decoration -->
+  <div class="timeline-deco" aria-hidden="true"><div class="timeline-deco-mid"></div></div>
+
+  <!-- ═══ REEL ═══ -->
+  <section id="reel" class="section reel-section">
+    <div class="reel-bg-text" aria-hidden="true">REEL</div>
+    <!-- Waveform decoration -->
+    <div class="waveform-deco" id="waveform-deco" aria-hidden="true"></div>
+    <div class="container">
+      <div class="section-head" data-reveal="slide-left">
+        <div class="section-tag">/ 02 — Showreel</div>
+        <h2 class="section-title">The<br><em>Showreel</em></h2>
+      </div>
+      <div class="reel-player-wrap" data-reveal="scale-up">
+        <div class="reel-player" id="reel-player">
+          <div class="reel-placeholder" id="reel-placeholder">
+            <div class="reel-play-btn" id="reel-play-btn" onclick="playReel()" aria-label="Play showreel">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span>Watch Showreel</span>
+          </div>
+          <div id="reel-embed" class="reel-embed" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Film strip divider -->
+  <div class="film-strip-divider" aria-hidden="true">
+    <div class="film-strip-track" id="film-strip-2"></div>
+  </div>
+
+  <!-- ═══ BEFORE / AFTER ═══ -->
+  <section id="before-after" class="section ba-section">
+    <div class="section-bg-text" aria-hidden="true" data-parallax-text>EDIT</div>
+    <div class="container">
+      <div class="section-head" data-reveal="slide-left">
+        <div class="section-tag">/ 03 — Edits</div>
+        <h2 class="section-title">Before<br><em>&amp; After</em></h2>
+        <p class="section-sub">The transformation from raw footage to cinematic gold.</p>
+      </div>
+      <div class="ba-grid" id="ba-grid" data-reveal="slide-right">
+        <div class="ba-empty">
+          <p>Edit comparisons coming soon.</p>
+          <span>Upload via admin panel to populate this section.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline keyframe decoration -->
+  <div class="timeline-deco" aria-hidden="true"><div class="timeline-deco-mid"></div></div>
+
+  <!-- ═══ SERVICES ═══ -->
+  <section id="services" class="section services-section">
+    <div class="section-bg-text" aria-hidden="true" data-parallax-text>CREATE</div>
+    <div class="container">
+      <div class="section-head" data-reveal="slide-left">
+        <div class="section-tag">/ 04 — Services</div>
+        <h2 class="section-title">What I<br><em>Offer</em></h2>
+      </div>
+      <div class="services-grid" id="services-grid">
+        <div class="service-card" data-reveal data-delay="0">
+          <div class="service-num">01</div>
+          <div class="service-icon-wrap">🎬</div>
+          <h3 class="service-title">Video Editing</h3>
+          <p>Precise cuts, color grading, sound design — cinematic storytelling from raw footage.</p>
+          <div class="service-line"></div>
+        </div>
+        <div class="service-card" data-reveal data-delay="80">
+          <div class="service-num">02</div>
+          <div class="service-icon-wrap">📸</div>
+          <h3 class="service-title">Photography</h3>
+          <p>Portraits, events, products — captured with intent and refined in post.</p>
+          <div class="service-line"></div>
+        </div>
+        <div class="service-card" data-reveal data-delay="160">
+          <div class="service-num">03</div>
+          <div class="service-icon-wrap">🎨</div>
+          <h3 class="service-title">Color Grading</h3>
+          <p>Hollywood-style color science using custom LUTs and DaVinci Resolve.</p>
+          <div class="service-line"></div>
+        </div>
+        <div class="service-card" data-reveal data-delay="240">
+          <div class="service-num">04</div>
+          <div class="service-icon-wrap">📱</div>
+          <h3 class="service-title">Social Media Reels</h3>
+          <p>Scroll-stopping short-form content built for Instagram, YouTube Shorts.</p>
+          <div class="service-line"></div>
+        </div>
+        <div class="service-card" data-reveal data-delay="320">
+          <div class="service-num">05</div>
+          <div class="service-icon-wrap">🎥</div>
+          <h3 class="service-title">Cinematography</h3>
+          <p>On-location shooting with a sharp eye for cinematic composition.</p>
+          <div class="service-line"></div>
+        </div>
+        <div class="service-card" data-reveal data-delay="400">
+          <div class="service-num">06</div>
+          <div class="service-icon-wrap">✦</div>
+          <h3 class="service-title">VFX &amp; Motion</h3>
+          <p>Custom animations, titles, and visual effects that elevate your production.</p>
+          <div class="service-line"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Film strip divider -->
+  <div class="film-strip-divider" aria-hidden="true">
+    <div class="film-strip-track" id="film-strip-3"></div>
+  </div>
+
+
+
+  <!-- Timeline keyframe decoration -->
+  <div class="timeline-deco" aria-hidden="true"><div class="timeline-deco-mid"></div></div>
+
+  <!-- ═══ CONTACT ═══ -->
+  <section id="contact" class="section contact-section">
+    <div class="section-bg-text" aria-hidden="true" data-parallax-text>CONNECT</div>
+    <div class="container">
+      <div class="section-head" data-reveal="slide-left">
+        <div class="section-tag">/ 06 — Contact</div>
+        <h2 class="section-title">Let's<br><em>Connect</em></h2>
+        <p class="section-sub">Based in India — available worldwide for remote projects.</p>
+      </div>
+
+      <div class="contact-layout">
+        <div class="contact-info" data-reveal="slide-right">
+          <a href="mailto:thevibescapturer8k@gmail.com" class="contact-link magnetic">
+            <span class="contact-link-label">Email</span>
+            <span class="contact-link-val">thevibescapturer8k@gmail.com</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://instagram.com/thevibescapturer" target="_blank" rel="noopener" class="contact-link magnetic">
+            <span class="contact-link-label">Instagram</span>
+            <span class="contact-link-val">@thevibescapturer</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://youtube.com/@starvlogss1235" target="_blank" rel="noopener" class="contact-link magnetic">
+            <span class="contact-link-label">YouTube</span>
+            <span class="contact-link-val">@starvlogss1235</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <form class="contact-form" id="contact-form" data-reveal="scale-up">
+          <div class="form-field">
+            <label for="cf-name">Name</label>
+            <input type="text" id="cf-name" name="name" placeholder="Your name" autocomplete="name" />
+          </div>
+          <div class="form-field">
+            <label for="cf-email">Email</label>
+            <input type="email" id="cf-email" name="email" placeholder="your@email.com" autocomplete="email" />
+          </div>
+          <div class="form-field">
+            <label for="cf-service">Service</label>
+            <select id="cf-service" name="service">
+              <option value="">Select a service</option>
+              <option>Video Editing</option>
+              <option>Photography</option>
+              <option>Color Grading</option>
+              <option>Social Media Reels</option>
+              <option>Cinematography</option>
+              <option>VFX & Motion</option>
+            </select>
+          </div>
+          <div class="form-field form-field--full">
+            <label for="cf-msg">Message</label>
+            <textarea id="cf-msg" name="message" rows="4" placeholder="Tell me about your project..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary magnetic" id="contact-submit">
+            <span>Send Message</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/TvC Website Logo.png" alt="TvC" width="50" height="50" onerror="this.src='assets/TVC_logo.jpg'" />
+        <div class="footer-brand-text">
+          <span class="footer-name">TheVibesCapturer</span>
+          <span class="footer-tag">Just Capture Every Moments</span>
+        </div>
+      </div>
+      <div class="footer-socials">
+        <a href="https://instagram.com/thevibescapturer" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon magnetic">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://youtube.com/@starvlogss1235" target="_blank" rel="noopener" aria-label="YouTube" class="social-icon magnetic">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="footer-year">2024</span> TheVibesCapturer. All rights reserved.</span>
+      <span>India · Available Worldwide</span>
+    </div>
+  </footer>
+
+  <!-- ═══ ADMIN PANEL (FULL SCREEN DASHBOARD) ═══ -->
+  <div id="admin-panel" class="admin-panel" role="dialog" aria-modal="true" aria-label="Admin Dashboard" style="display:none">
+    <div class="admin-header">
+      <h2>TvC_Clicks <span>Admin Dashboard</span></h2>
+      <button onclick="closeAdmin()" class="btn-ghost">Exit Dashboard ✕</button>
+    </div>
+
+    <div id="admin-login-form" class="admin-section">
+      <div class="admin-login">
+        <div class="admin-login-icon">🔑</div>
+        <h3>Admin Access</h3>
+        <input type="password" id="admin-password" placeholder="Enter password" onkeydown="if(event.key === 'Enter') checkAdminPassword()" />
+        <button class="btn-primary" onclick="checkAdminPassword()">Unlock Dashboard</button>
+      </div>
+    </div>
+
+    <div id="admin-content" style="display:none">
+      <!-- SIDEBAR -->
+      <div class="admin-sidebar">
+        <!-- Live Storage Visualizer -->
+        <div class="admin-storage-stats">
+          <h4>Firebase Database <span>Master Brain</span></h4>
+          <div class="storage-bar"><div class="storage-fill" id="storage-fb" style="width: 0%; background: #ffca28;"></div></div>
+          <small><span id="stat-fb-gb">0</span> / 5 GB (Fast Storage)</small>
+          
+          <h4 style="margin-top:15px;">Cloudinary Storage</h4>
+          <div class="storage-bar"><div class="storage-fill" id="storage-b2" style="width: 0%; background: #0076D7;"></div></div>
+          <small><span id="stat-b2-gb">0</span> / 25 GB (Free Cloud Media)</small>
+
+          <div style="display:flex; gap:10px; margin-top:20px;">
+            <a href="https://console.firebase.google.com/" target="_blank" class="btn-ghost" style="padding:8px; flex:1; font-size:0.7rem; text-align:center;">Firebase Console</a>
+            <a href="https://cloudinary.com/console" target="_blank" class="btn-ghost" style="padding:8px; flex:1; font-size:0.7rem; text-align:center;">Cloudinary Console</a>
+          </div>
+        </div>
+
+        <div class="admin-stats-row" style="margin-top:20px;">
+          <div class="admin-stat"><span id="stat-total">0</span><small>Total Files</small></div>
+          <div class="admin-stat"><span id="stat-links">0</span><small>Links</small></div>
+        </div>
+        <div class="admin-tabs">
+          <button class="admin-tab active" onclick="switchTab('upload',this)">Cloud Upload</button>
+          <button class="admin-tab" onclick="switchTab('manage',this)">Manage Media</button>
+          <button class="admin-tab" onclick="switchTab('settings',this)">Settings</button>
+        </div>
+        <div class="admin-sidebar-footer">
+           <button class="btn-danger" onclick="adminLogout()" style="width:100%">Logout</button>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="admin-main">
+        <div id="tab-upload" class="admin-tab-content">
+          <div class="admin-section-header">
+            <h3>Add New Media</h3>
+            <p>Upload a high-res file or paste an external link directly into your Event hierarchy.</p>
+          </div>
+
+          <div class="admin-card">
+            <div class="upload-mode-toggle" style="display:flex; gap:10px; margin-bottom:25px;">
+              <button class="btn-primary" id="btn-mode-file" onclick="setUploadMode('file')">Upload File</button>
+              <button class="btn-ghost" id="btn-mode-link" onclick="setUploadMode('link')">Paste Link</button>
+            </div>
+
+            <div class="form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:25px;">
+              <div class="input-group">
+                <label>Event Name</label>
+                <input type="text" id="upload-event" placeholder="e.g., The Royal Wedding" />
+              </div>
+              <div class="input-group">
+                <label>Section / Folder</label>
+                <input type="text" id="upload-subsection" list="subsection-list" placeholder="e.g., Photos, Videos, Edits" />
+                <datalist id="subsection-list">
+                  <option value="Photos">
+                  <option value="Videos">
+                  <option value="Edits">
+                </datalist>
+              </div>
+              <div class="input-group">
+                <label>Category / Style</label>
+                <input type="text" id="upload-category" placeholder="e.g., Portrait, Haldi, Candid" />
+              </div>
+              <div class="input-group">
+                <label>Media Title</label>
+                <input type="text" id="upload-title" placeholder="Optional title" />
+              </div>
+            </div>
+
+            <div style="height:1px; background:var(--border); margin:25px 0;"></div>
+
+            <!-- File Upload Zone -->
+            <div id="zone-file">
+              <div class="upload-zone" id="upload-zone" style="padding: 40px 20px; text-align: center;">
+                <div class="upload-zone-inner" onclick="document.getElementById('file-input').click()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40" style="margin-bottom:10px; color:var(--text-3);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <p style="font-family:var(--font-sans); font-size:1.1rem; margin-bottom:5px; color:var(--white);">Drop files here or click to browse</p>
+                  <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-3); letter-spacing:0.1em;">JPG · PNG · MP4</span>
+                </div>
+                <input type="file" id="file-input" accept="image/*,video/*" multiple style="display:none" onchange="handleFileUpload(this.files)" />
+              </div>
+              
+              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <label>Target Cloud:</label>
+                <select id="upload-cloud-target" style="padding:5px; border-radius:4px; background:var(--bg-base); color:var(--text); border:1px solid var(--border);">
+                  <option value="cloudinary" selected>Cloudinary (Free Storage)</option>
+                  <option value="firebase">Firebase (Database Only)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Link Paste Zone -->
+            <div id="zone-link" style="display:none;">
+              <label>External Media URL</label>
+              <input type="url" id="upload-url" placeholder="Paste Instagram, YouTube, or Vimeo URL" style="width:100%;" />
+            </div>
+
+            <div class="upload-preview" id="upload-preview" style="margin-top:20px;"></div>
+            
+            <div class="upload-actions" style="margin-top:30px;">
+              <button class="btn-primary" onclick="submitUpload()" style="width:100%; padding:18px; font-size:1rem; letter-spacing:0.15em;">SAVE TO MASTER BRAIN</button>
+            </div>
+          </div>
+        </div>
+        <div class="upload-progress" id="upload-progress" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px); flex-direction: column;">
+          <div style="background: var(--bg-card); border: 1px solid var(--red); border-radius: 16px; padding: 40px; width: 90%; max-width: 500px; box-shadow: 0 20px 60px rgba(200,40,42,0.15); text-align: center;">
+            <div id="progress-text" style="font-family: var(--font-display); font-style: italic; font-size: 1.5rem; color: var(--white); margin-bottom: 20px;">Uploading...</div>
+            <div style="height: 12px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);">
+              <div id="progress-fill" style="height: 100%; width: 0%; background: var(--red); transition: width 0.3s ease; box-shadow: 0 0 15px var(--red);"></div>
+            </div>
+            <div style="margin-top: 15px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em;">Please wait while your media is saved to the cloud.</div>
+          </div>
+        </div>
+
+        <div id="tab-manage" class="admin-tab-content" style="display:none">
+          <div class="admin-section-header">
+            <h3>Manage Media</h3>
+            <p>Full screen preview of all uploaded content.</p>
+          </div>
+          <div id="manage-grid" class="manage-grid"></div>
+        </div>
+
+        <div id="tab-settings" class="admin-tab-content" style="display:none">
+          <div class="admin-section-header">
+            <h3>System Settings</h3>
+          </div>
+          <div class="settings-section">
+            <h4>Showreel URL</h4>
+            <input type="url" id="reel-url-input" placeholder="YouTube or Vimeo embed URL" style="width:100%; padding:12px; margin-bottom:10px; background:var(--bg-3); border:1px solid var(--border); color:var(--white);" />
+            <button class="btn-primary" onclick="saveReelUrl()">Save Link</button>
+          </div>
+          <div class="settings-section" style="margin-top:2rem;">
+            <h4>Storage Backend</h4>
+            <p id="storage-info" style="color:var(--text-2);">Mode: Local (Testing)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ LIGHTBOX ═══ -->
+  <div id="lightbox" class="lightbox" onclick="closeLightboxOnBg(event)">
+    <div class="lightbox-content">
+      <button class="lightbox-close" onclick="closeLightbox()">×</button>
+      <button id="lightbox-prev" class="lightbox-prev" onclick="navigateLightbox(-1)">‹</button>
+      <button id="lightbox-next" class="lightbox-next" onclick="navigateLightbox(1)">›</button>
+      <div id="lightbox-media" class="lightbox-media-container"></div>
+      <div class="lightbox-info">
+        <div id="lightbox-title" class="lightbox-title"></div>
+        <div id="lightbox-desc" class="lightbox-desc"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Sleek Studio Light Toggle -->
+  <div id="studio-light-toggle" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; align-items: center; gap: 10px; cursor: pointer; opacity: 0.5; transition: opacity 0.3s; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.15em;">
+    <span>Studio Light</span>
+    <div id="light-toggle-switch" style="width: 36px; height: 18px; border-radius: 9px; border: 1px solid var(--border-2); position: relative; transition: all 0.3s;">
+      <div id="light-toggle-knob" style="width: 12px; height: 12px; border-radius: 50%; background: var(--text-2); position: absolute; top: 2px; left: 2px; transition: all 0.3s;"></div>
+    </div>
+  </div>
+
+  <!-- ═══ SCRIPTS ═══ -->
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Cinematic effects -->
+  <script>window.studioLightsOn = true;</script>
+  <script src="cinematic.js?v=4"></script>
+  <!-- App logic (module) -->
+  <script type="module" src="app.js?v=14"></script>
+</body>
+</html>

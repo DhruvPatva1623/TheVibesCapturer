@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fields of Interest — TheVibesCapturer</title>
+    <meta name="description" content="Explore TheVibesCapturer's fields — Wedding Films, Short Films, Brand Commercials, Events, Reels, Photography and more." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="assets/TvC Website Logo.png" />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      if (localStorage.getItem('tvc_theme') === 'light') {
+        document.documentElement.classList.add('light-theme');
+        document.addEventListener('DOMContentLoaded', function() {
+          document.body.classList.add('light-theme');
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <!-- ═══ CURSOR ═══ -->
+    <div id="cursor" aria-hidden="true">
+      <div class="cursor-dot"></div>
+      <div class="cursor-ring"></div>
+      <div class="cursor-aperture">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- ═══ LOADER ═══ -->
+    <div id="loader" aria-label="Loading" role="status" style="display:none">
+      <div class="loader-inner">
+        <div class="loader-brand">TvC</div>
+      </div>
+    </div>
+
+    <nav id="navbar" class="navbar scrolled" role="navigation" aria-label="Main navigation">
+      <a href="index.html" class="nav-brand" id="nav-brand">
+        <img src="assets/TvC Website Logo.png" alt="TheVibesCapturer Logo" width="56" height="56" onerror="this.src='assets/TVC_logo.jpg'" style="border-radius:10px;box-shadow:0 0 20px rgba(200,40,42,0.65), 0 0 40px rgba(200,40,42,0.35); transition: transform 0.3s;" />
+      </a>
+
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="index.html#gallery" class="nav-link">Work</a></li>
+        <li><a href="index.html#reel" class="nav-link">Reel</a></li>
+        <li><a href="index.html#services" class="nav-link">Services</a></li>
+        <li><a href="fields.html" class="nav-link nav-link--gold active">Fields</a></li>
+        <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Camera clicker theme changer -->
+        <button class="theme-btn magnetic" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle Theme" title="Switch Theme">
+          <svg viewBox="0 0 24 24">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </button>
+        <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()" aria-label="Admin"><span class="admin-dot"></span>Admin</button>
+        <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile nav -->
+    <div class="mobile-nav" id="mobile-nav" role="dialog" aria-modal="true">
+      <button class="mobile-close" onclick="toggleMobileNav()" aria-label="Close">✕</button>
+      <nav>
+        <a href="index.html" onclick="toggleMobileNav()">Home</a>
+        <a href="index.html#gallery" onclick="toggleMobileNav()">Work</a>
+        <a href="index.html#reel" onclick="toggleMobileNav()">Reel</a>
+        <a href="index.html#services" onclick="toggleMobileNav()">Services</a>
+        <a href="fields.html">Fields</a>
+        <a href="index.html#contact" onclick="toggleMobileNav()">Contact</a>
+      </nav>
+    </div>
+
+    <div class="fields-hero">
+      <div class="fields-hero-inner">
+        <div class="fields-eyebrow">Fields of Interest</div>
+        <h1>What I Create</h1>
+        <p>Each field is a canvas — a different way to tell a story through the lens.</p>
+      </div>
+    </div>
+
+    <section class="fields-grid-section">
+      <div class="container">
+        <a href="index.html" class="back-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back to Portfolio
+        </a>
+        <div class="fields-section-head">
+          <div>
+            <div class="section-eyebrow" style="text-align:left">My Craft</div>
+            <h2 class="section-title" style="text-align:left;margin-bottom:0">All Fields</h2>
+          </div>
+          <div class="fields-count-badge">10 Active Fields</div>
+        </div>
+        <div class="fields-grid" id="fields-grid">
+          <div class='field-card' data-field='wedding-films'>
+            <div class='field-media'>
+              <div class='field-media-placeholder'>
+                <span class='placeholder-icon'>💍</span>
+                <span class='placeholder-text'>Wedding Films examples will appear here</span>
+                <span class='placeholder-tag'>Coming Soon</span>
+              </div>
+              <div class='field-example-count'>0 examples</div>
+            </div>
+            <div class='field-body'>
+              <div class='field-number'>01 / 10</div>
+              <h3 class='field-title'>Wedding Films</h3>
+              <p class='field-desc'>Cinematic wedding coverage capturing the emotion, the details, and the moments that last a lifetime.</p>
+              <div class='field-tags'>
+              <span class='field-tag'>Cinematic</span>
+              <span class='field-tag'>Full Day</span>
+              <span class='field-tag'>Highlight Reel</span>
+              </div>
+            </div>
+            <div class='field-footer'>
+              <div class='field-status'>
+                <div class='field-status-dot'></div>
+                <span style='color:var(--clr-gold)'>Adding Examples Soon</span>
+              </div>
+            </div>
+          </div>          <div class='field-card' data-field='short-films'>
+            <div class='field-media'>
+              <div class='field-media-placeholder'>
+                <span class='placeholder-icon'>🎬</span>
+                <span class='placeholder-text'>Short Films examples will appear here</span>
+                <span class='placeholder-tag'>Coming Soon</span>
+              </div>
+              <div class='field-example-count'>0 examples</div>
+            </div>
+            <div class='field-body'>
+              <div class='field-number'>02 / 10</div>
+              <h3 class='field-title'>Short Films</h3>
+              <p class='field-desc'>Story-driven short films with a strong visual language — scripted or documentary style.</p>
+              <div class='field-tags'>
+              <span class='field-tag'>Narrative</span>
+              <span class='field-tag'>Documentary</span>
+              <span class='field-tag'>Screenplay</span>
+              </div>
+            </div>
+            <div class='field-footer'>
+              <div class='field-status'>
+                <div class='field-status-dot'></div>
+                <span style='color:var(--clr-gold)'>Adding Examples Soon</span>
+              </div>
+            </div>
+          </div>          <div class='field-card' data-field='brand-commercials'>
+            <div class='field-media'>
+              <div class='field-media-placeholder'>
+                <span class='placeholder-icon'>📺</span>
+                <span class='placeholder-text'>Brand Commercials examples will appear here</span>
+                <span class='placeholder-tag'>Coming Soon</span>
+              </div>
+              <div class='field-example-count'>0 examples</div>
+            </div>
+            <div class='field-body'>
+              <div class='field-number'>03 / 10</div>
+              <h3 class='field-title'>Brand Commercials</h3>
+              <p class='field-desc'>High-impact advertising content that communicates your brand identity with clarity and style.</p>
+              <div class='field-tags'>
+              <span class='field-tag'>Advertising</span>
+              <span class='field-tag'>Brand Identity</span>
+              <span class='field-tag'>Product</span>
+              </div>
+            </div>
+            <div class='field-footer'>
+              <div class='field-status'>
+                <div class='field-status-dot'></div>
+                <span style='color:var(--clr-gold)'>Adding Examples Soon</span>
+              </div>
+            </div>
+          </div>          <div class='field-card' data-field='events-concerts'>
+            <div class='field-media'>
+              <div class='field-media-placeholder'>
+                <span class='placeholder-icon'>🎤</span>
+                <span class='placeholder-text'>Events & Concerts examples will appear here</span>
+                <span class='placeholder-tag'>Coming Soon</span>
+              </div>
+              <div class='field-example-count'>0 examples</div>
+            </div>
+            <div class='field-body'>
+              <div class='field-number'>04 / 10</div>
+              <h3 class='field-title'>Events & Concerts</h3>
+              <p class='field-desc'>Dynamic event coverage — live energy captured through fast-moving, high-quality videography.</p>
+              <div class='field-tags'>
+              <span class='field-tag'>Live Events</span>
+              <span class='field-tag'>Concert</span>
+              <span class='field-tag'>Coverage</span>
+              </div>
+            </div>
+            <div class='field-footer'>
+              <div class='field-status'>
+                <div class='field-status-dot'></div>
+                <span style='color:var(--clr-gold)'>Adding Examples Soon</span>
+              </div>
+            </div>
+          </div>          <div class='field-card' data-field='social-media-reels'>
+            <div class='field-media'>
+              <div class='field-media-placeholder'>
+                <span class='placeholder-icon'>📱</span>
+                <span class='placeholder-text'>Social Media Reels examples will appear here</span>
+                <span class='placeholder-tag'>Coming Soon</span>
+              </div>
+              <div class='field-example-count'>0 examples</div>
+            </div>
+            <div class='field-body'>
+              <div class='field-number'>05 / 10</div>
+              <h3 class='field-title'>Social Media Reels</h3>
+              <p class='field-desc'>Scroll-stopping short-form content for Instagram, YouTube Shorts, and beyond.</p>
+              <div class='field-tags'>
+              <span class='field-tag'>Instagram</span>
+              <span class='field-tag'>YouTube Shorts</span>
+              <span class='field-tag'>Trending</span>
+              </div>
+            </div>
+            <div class='field-footer'>
+              <div class='field-status'>
+                <div class='field-status-dot'></div>
+                <span style='color:var(--clr-gold)'>Adding Examples Soon</span>
+              </div>
+            </div>
+          </div>          <div class='field-card' data-field='portrait-photography'>
+            <div class='field-media'>
+              <div class='field-media-placeholder'>
+                <span class='placeholder-icon'>🧑‍🎨</span>
+                <span class='placeholder-text'>Portrait Photography examples will appear here</span>
+                <span class='placeholder-tag'>Coming Soon</span>
+              </div>
+              <div class='field-example-count'>0 examples</div>
+            </div>
+            <div class='field-body'>
+              <div class='field-number'>06 / 10</div>
+              <h3 class='field-title'>Portrait Photography</h3>
+              <p class='field-desc'>Character-driven portraits that reveal personality — shot with intent, refined with precision.</p>
+              <div class='field-tags'>
+              <span class='field-tag'>Studio</span>
+              <span class='field-tag'>Outdoor</span>
+              <span class='field-tag'>Editorial</span>
+              </div>
+            </div>
+            <div class='field-footer'>
+              <div class='field-status'>
+                <div class='field-status-dot'></div>
+                <span style='color:var(--clr-gold)'>Adding Examples Soon</span>
+              </div>
+            </div>
+          </div>          <div class='field-card' data-field='street-photography'>
+            <div class='field-media'>
+              <div class='field-media-placeholder'>
+                <span class='placeholder-icon'>🏙️</span>
+                <span class='placeholder-text'>Street Photography examples will appear here</span>
+                <span class='placeholder-tag'>Coming Soon</span>
+              </div>
+              <div class='field-example-count'>0 examples</div>
+            </div>
+            <div class='field-body'>
+              <div class='field-number'>07 / 10</div>
+              <h3 class='field-title'>Street Photography</h3>
+              <p class='field-desc'>Candid, raw moments from the streets — unscripted stories told in a single frame.</p>
+              <div class='field-tags'>
+              <span class='field-tag'>Candid</span>
+              <span class='field-tag'>Urban</span>
+              <span class='field-tag'>Documentary</span>
+              </div>
+            </div>
+            <div class='field-footer'>
+              <div class='field-status'>
+                <div class='field-status-dot'></div>
+                <span style='color:var(--clr-gold)'>Adding Examples Soon</span>
+              </div>
+            </div>
+          </div>          <div class='field-card' data-field='product-photography'>
+            <div class='field-media'>
+              <div class='field-media-placeholder'>
+                <span class='placeholder-icon'>📦</span>
+                <span class='placeholder-text'>Product Photography examples will appear here</span>
+                <span class='placeholder-tag'>Coming Soon</span>
+              </div>
+              <div class='field-example-count'>0 examples</div>
+            </div>
+            <div class='field-body'>
+              <div class='field-number'>08 / 10</div>
+              <h3 class='field-title'>Product Photography</h3>
+              <p class='field-desc'>Clean, commercial product shots that make your product the hero of every frame.</p>
+              <div class='field-tags'>
+              <span class='field-tag'>eCommerce</span>
+              <span class='field-tag'>Commercial</span>
+              <span class='field-tag'>Studio</span>
+              </div>
+            </div>
+            <div class='field-footer'>
+              <div class='field-status'>
+                <div class='field-status-dot'></div>
+                <span style='color:var(--clr-gold)'>Adding Examples Soon</span>
+              </div>
+            </div>
+          </div>          <div class='field-card' data-field='nature-landscape'>
+            <div class='field-media'>
+              <div class='field-media-placeholder'>
+                <span class='placeholder-icon'>🌄</span>
+                <span class='placeholder-text'>Nature & Landscape examples will appear here</span>
+                <span class='placeholder-tag'>Coming Soon</span>
+              </div>
+              <div class='field-example-count'>0 examples</div>
+            </div>
+            <div class='field-body'>
+              <div class='field-number'>09 / 10</div>
+              <h3 class='field-title'>Nature & Landscape</h3>
+              <p class='field-desc'>Breathtaking wide shots and intimate nature details — where light, geography, and timing meet.</p>
+              <div class='field-tags'>
+              <span class='field-tag'>Golden Hour</span>
+              <span class='field-tag'>Wide Angle</span>
+              <span class='field-tag'>Aerial</span>
+              </div>
+            </div>
+            <div class='field-footer'>
+              <div class='field-status'>
+                <div class='field-status-dot'></div>
+                <span style='color:var(--clr-gold)'>Adding Examples Soon</span>
+              </div>
+            </div>
+          </div>          <div class='field-card' data-field='travel-content'>
+            <div class='field-media'>
+              <div class='field-media-placeholder'>
+                <span class='placeholder-icon'>✈️</span>
+                <span class='placeholder-text'>Travel Content examples will appear here</span>
+                <span class='placeholder-tag'>Coming Soon</span>
+              </div>
+              <div class='field-example-count'>0 examples</div>
+            </div>
+            <div class='field-body'>
+              <div class='field-number'>10 / 10</div>
+              <h3 class='field-title'>Travel Content</h3>
+              <p class='field-desc'>Journey documentation — cultures, landscapes, and local life told through immersive visual storytelling.</p>
+              <div class='field-tags'>
+              <span class='field-tag'>Vlog</span>
+              <span class='field-tag'>Culture</span>
+              <span class='field-tag'>Cinematic Travel</span>
+              </div>
+            </div>
+            <div class='field-footer'>
+              <div class='field-status'>
+                <div class='field-status-dot'></div>
+                <span style='color:var(--clr-gold)'>Adding Examples Soon</span>
+              </div>
+            </div>
+          </div>        </div>
+      </div>
+    </section>
+
+    <section style="background:#000;padding:var(--space-xl) 0;border-top:1px solid var(--clr-border);text-align:center">
+      <div class="container">
+        <div class="section-eyebrow" style="display:block;text-align:center">Work Together</div>
+        <h2 class="section-title" style="margin-bottom:var(--space-sm)">Interested in one of these?</h2>
+        <p style="color:var(--clr-text-2);margin-bottom:var(--space-lg);font-size:.95rem">Based in India, available worldwide for remote projects.</p>
+        <a href="index.html#contact" class="btn-primary" style="display:inline-flex">Get In Touch</a>
+      </div>
+    </section>
+
+    <footer style="padding:var(--space-md) 0;border-top:1px solid var(--clr-border);background:#000">
+      <div class="container">
+        <div class="footer-center">
+          <a href="index.html" class="nav-brand footer-brand-link">
+            <img src="assets/TvC Website Logo.png" alt="TvC" width="30" height="30" onerror="this.src='assets/TVC_logo.jpg'" />
+            <span class="brand-text">TvC</span>
+          </a>
+          <div class="footer-bottom" style="border:none;padding-top:0;margin-top:8px;color:rgba(255,255,255,.2);font-size:.7rem">
+            <span>&#169; <span id="footer-year">2024</span> TheVibesCapturer. All rights reserved.</span>
+            <span>Crafted for visual creators.</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('footer-year').textContent = new Date().getFullYear();
+      document.querySelectorAll('.field-card').forEach(function(card) {
+        card.addEventListener('mousemove', function(e) {
+          var rect = card.getBoundingClientRect();
+          var dx = (e.clientX - rect.left - rect.width/2) / (rect.width/2);
+          var dy = (e.clientY - rect.top - rect.height/2) / (rect.height/2);
+          card.style.transform = 'perspective(1000px) rotateX('+(-dy*6)+'deg) rotateY('+(dx*6)+'deg) translateY(-8px)';
+        });
+        card.addEventListener('mouseleave', function() { card.style.transform = ''; });
+      });
+    </script>
+    <script>window.studioLightsOn = true;</script>
+    <script src="cinematic.js?v=4"></script>
+  </body>
+</html>

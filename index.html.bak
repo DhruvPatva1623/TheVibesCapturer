@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TheVibesCapturer — Just Capture Every Moments</title>
+    <meta name="description" content="TheVibesCapturer — Professional Video Editor & Cinematographer. Wedding Films, Brand Commercials, Portrait & Travel Photography. Based in India, available worldwide." />
+    <meta name="keywords" content="TheVibesCapturer, TvC, video editor, cinematographer, portfolio, wedding films, brand commercials, photography" />
+    <meta name="author" content="TheVibesCapturer" />
+    <meta property="og:title" content="TheVibesCapturer — Just Capture Every Moments" />
+    <meta property="og:description" content="Professional Video Editor & Cinematographer" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/TvC Website Logo.png" />
+    <!-- Fonts: Premium combination -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="assets/TvC Website Logo.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- ═══════════════════════════════════════════════════════════
+         NAVBAR
+    ═══════════════════════════════════════════════════════════ -->
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+      <a href="#home" class="nav-brand" id="nav-brand">
+        <img src="assets/TvC Website Logo.png" alt="TheVibesCapturer Logo" width="38" height="38" onerror="this.src='assets/TVC_logo.jpg'" />
+        <span class="brand-text">TvC</span>
+      </a>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#gallery">Work</a></li>
+        <li><a href="#reel">Reel</a></li>
+        <li><a href="#before-after">Edits</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="fields.html" id="nav-fields">Fields</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()" aria-label="Admin Panel"><span>🔑</span><span>Admin</span></button>
+        <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" onclick="toggleMobileNav()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Nav -->
+    <div class="mobile-nav" id="mobile-nav" role="navigation">
+      <a href="#home" onclick="closeMobileNav()">Home</a>
+      <a href="#gallery" onclick="closeMobileNav()">Work</a>
+      <a href="#reel" onclick="closeMobileNav()">Reel</a>
+      <a href="#before-after" onclick="closeMobileNav()">Edits</a>
+      <a href="#services" onclick="closeMobileNav()">Services</a>
+      <a href="#contact" onclick="closeMobileNav()">Contact</a>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════════════════════════ -->
+    <section id="home" class="hero" aria-labelledby="hero-title">
+      <!-- 3D Three.js Canvas -->
+      <canvas id="hero-canvas" class="hero-canvas" aria-hidden="true"></canvas>
+
+      <div class="hero-bg">
+        <img src="assets/hero_bg.png" alt="" aria-hidden="true" />
+      </div>
+      <div class="floating-orb orb-1" aria-hidden="true"></div>
+      <div class="floating-orb orb-2" aria-hidden="true"></div>
+      <div class="floating-orb orb-3" aria-hidden="true"></div>
+
+      <!-- 3D aperture SVG spinner -->
+      <div class="aperture-3d" aria-hidden="true">
+        <div class="aperture-ring ring-1">
+          <svg viewBox="0 0 200 200" class="aperture-svg">
+            <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(200,40,42,0.12)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(200,40,42,0.08)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="50" fill="none" stroke="rgba(245,213,128,0.1)" stroke-width="1"/>
+            <g class="aperture-blades" transform-origin="100 100">
+              <path d="M100,100 L160,30 A70,70 0 0,0 30,30 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <path d="M100,100 L170,100 A70,70 0 0,0 100,30 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <path d="M100,100 L160,170 A70,70 0 0,0 170,100 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <path d="M100,100 L100,170 A70,70 0 0,0 160,170 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <path d="M100,100 L30,170 A70,70 0 0,0 100,170 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <path d="M100,100 L30,100 A70,70 0 0,0 30,170 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <path d="M100,100 L40,30 A70,70 0 0,0 30,100 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <path d="M100,100 L100,30 A70,70 0 0,0 40,30 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+            </g>
+          </svg>
+        </div>
+        <div class="aperture-ring ring-2"></div>
+        <div class="aperture-ring ring-3"></div>
+        <div class="aperture-dot"></div>
+      </div>
+
+      <div class="hero-content">
+        <h1 class="hero-title" id="hero-title">
+          <span class="hero-line-1">TheVibesCapturer</span>
+          <span class="hero-line-2 accent">Sees What Others Miss.</span>
+        </h1>
+
+        <p class="hero-tagline">Just Capture Every Moments</p>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number" data-count="0">X+</span>
+            <span class="stat-label">Projects Done</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat-item">
+            <span class="stat-number" data-count="0">X+</span>
+            <span class="stat-label">Happy Clients</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat-item">
+            <span class="stat-number">3+</span>
+            <span class="stat-label">Years Exp.</span>
+          </div>
+        </div>
+
+        <div class="hero-cta">
+          <a href="#gallery" class="btn-primary" id="hero-gallery-btn">View My Work</a>
+          <a href="#contact" class="btn-secondary" id="hero-contact-btn">Get In Touch</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-card-stack">
+          <div class="hero-card hero-card-main card-3d" id="hero-card-main">
+            <img src="assets/hero_bg.png" alt="Cinematography work" />
+            <div class="card-3d-shine"></div>
+          </div>
+          <div class="hero-card hero-card-thumb card-3d" id="hero-card-thumb">
+            <img src="assets/TvC Website Logo.png" alt="TheVibesCapturer" />
+            <div class="card-3d-shine"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator" aria-hidden="true">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 5v14M19 12l-7 7-7-7"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         STATS BAR
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="stats-section" aria-label="Statistics">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-card fade-in">
+            <span class="num">X+</span>
+            <span class="label">Projects Completed</span>
+          </div>
+          <div class="stat-card fade-in">
+            <span class="num">X+</span>
+            <span class="label">Satisfied Clients</span>
+          </div>
+          <div class="stat-card fade-in">
+            <span class="num">3+</span>
+            <span class="label">Years Experience</span>
+          </div>
+          <div class="stat-card fade-in interests-card" style="cursor:pointer" onclick="window.location='fields.html'">
+            <span class="num">10+</span>
+            <span class="label">Fields of Interest</span>
+            <div class="interests-scroll" aria-hidden="true">
+              <span>Wedding Films</span>
+              <span>Short Films</span>
+              <span>Brand Commercials</span>
+              <span>Events &amp; Concerts</span>
+              <span>Social Media Reels</span>
+              <span>Portrait Photography</span>
+              <span>Street Photography</span>
+              <span>Product Photography</span>
+              <span>Nature &amp; Landscape</span>
+              <span>Travel Content</span>
+            </div>
+            <div class="interests-cta">Tap to explore &rarr;</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         GALLERY
+    ═══════════════════════════════════════════════════════════ -->
+    <section id="gallery" class="gallery-section" aria-labelledby="gallery-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">Portfolio</span>
+          <h2 class="section-title" id="gallery-title">My Creative Work</h2>
+          <p class="section-subtitle">Explore photos, videos, and edited masterpieces from my collection.</p>
+          <div class="divider"></div>
+        </div>
+
+        <div class="filter-tabs" id="filter-tabs" role="tablist">
+          <button class="filter-tab active" data-filter="all" role="tab" aria-selected="true">All</button>
+          <button class="filter-tab" data-filter="photo" role="tab" aria-selected="false">Photos</button>
+          <button class="filter-tab" data-filter="video" role="tab" aria-selected="false">Videos</button>
+          <button class="filter-tab" data-filter="edited" role="tab" aria-selected="false">Edited</button>
+          <button class="filter-tab" data-filter="other" role="tab" aria-selected="false">Other</button>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid" role="list" aria-label="Media gallery">
+          <div class="gallery-empty" id="gallery-empty">
+            <div class="empty-icon">◻</div>
+            <h3>No media yet</h3>
+            <p>Use the Admin panel to upload your work.</p>
+          </div>
+        </div>
+
+        <div class="load-more-wrap" id="load-more-wrap" style="display:none">
+          <button class="btn-secondary" id="load-more-btn" onclick="loadMoreItems()">Load More</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         VIDEO REEL
+    ═══════════════════════════════════════════════════════════ -->
+    <section id="reel" class="reel-section" aria-labelledby="reel-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">Showreel</span>
+          <h2 class="section-title" id="reel-title">Video Reel</h2>
+          <p class="section-subtitle">Watch my best cinematic work in motion.</p>
+          <div class="divider"></div>
+        </div>
+
+        <div class="reel-player fade-in" id="reel-player">
+          <div class="reel-placeholder" id="reel-placeholder">
+            <div class="play-icon">▶</div>
+            <p>Upload a video reel via Admin Panel</p>
+          </div>
+          <video id="main-reel-video" controls style="display:none; width:100%;"></video>
+        </div>
+
+        <div class="reel-playlist" id="reel-playlist"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         BEFORE & AFTER
+    ═══════════════════════════════════════════════════════════ -->
+    <section id="before-after" class="ba-section" aria-labelledby="ba-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">My Editing Skills</span>
+          <h2 class="section-title" id="ba-title">Before &amp; After</h2>
+          <p class="section-subtitle">Raw footage vs. my final edit — the transformation.</p>
+          <div class="divider"></div>
+        </div>
+
+        <div class="ba-grid fade-in" id="ba-grid">
+          <div class="ba-card" id="ba-placeholder">
+            <div class="ba-images">
+              <img src="assets/hero_bg.png" alt="Before edit" loading="lazy" />
+              <img src="assets/TVC_logo.jpg" alt="After edit" loading="lazy" onerror="this.src='assets/tvc_logo.png'" style="object-fit:contain; background:#e4eeff;" />
+            </div>
+            <div class="ba-labels">
+              <div class="ba-label ba-label-before">Before</div>
+              <div class="ba-label ba-label-after">After</div>
+            </div>
+            <div class="ba-info">
+              <div class="ba-title">Sample Color Grade</div>
+              <div class="ba-desc">Cinematic color grading with LUTs &amp; manual correction.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SERVICES
+    ═══════════════════════════════════════════════════════════ -->
+    <section id="services" class="services-section" aria-labelledby="services-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">What I Offer</span>
+          <h2 class="section-title" id="services-title">My Services</h2>
+          <p class="section-subtitle">Professional video &amp; photo services tailored for your vision.</p>
+          <div class="divider"></div>
+        </div>
+
+        <div class="services-grid">
+          <div class="service-card fade-in tilt-card">
+            <div class="service-icon">🎬</div>
+            <h3 class="service-title">Video Editing</h3>
+            <p class="service-desc">Precise cuts, transitions, color grading, and sound design — built for cinematic storytelling.</p>
+          </div>
+          <div class="service-card fade-in tilt-card">
+            <div class="service-icon">📸</div>
+            <h3 class="service-title">Photography</h3>
+            <p class="service-desc">Portraits, events, and products — captured with intent and refined in post.</p>
+          </div>
+          <div class="service-card fade-in tilt-card">
+            <div class="service-icon">🎨</div>
+            <h3 class="service-title">Color Grading</h3>
+            <p class="service-desc">Hollywood-style color science using custom LUTs and DaVinci Resolve.</p>
+          </div>
+          <div class="service-card fade-in tilt-card">
+            <div class="service-icon">📱</div>
+            <h3 class="service-title">Social Media Reels</h3>
+            <p class="service-desc">Scroll-stopping short-form content for Instagram, YouTube Shorts, and beyond.</p>
+          </div>
+          <div class="service-card fade-in tilt-card">
+            <div class="service-icon">🎥</div>
+            <h3 class="service-title">Cinematography</h3>
+            <p class="service-desc">On-location shooting with professional gear and a strong eye for composition.</p>
+          </div>
+          <div class="service-card fade-in tilt-card">
+            <div class="service-icon">✦</div>
+            <h3 class="service-title">VFX &amp; Motion Graphics</h3>
+            <p class="service-desc">Custom animations, titles, and visual effects that elevate your production.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         CONTACT
+    ═══════════════════════════════════════════════════════════ -->
+    <section id="contact" class="contact-section" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">Get In Touch</span>
+          <h2 class="section-title" id="contact-title">Let's Work Together</h2>
+          <p class="section-subtitle">Based in India, available worldwide for remote projects.</p>
+          <div class="divider"></div>
+        </div>
+
+        <div class="contact-layout">
+          <div class="contact-info fade-in">
+            <div class="contact-methods">
+              <a href="mailto:thevibescapturer8k@gmail.com" class="contact-method" id="contact-email">
+                <div class="contact-method-icon">✉</div>
+                <div>
+                  <div class="contact-method-label">Email</div>
+                  <div class="contact-method-value">thevibescapturer8k@gmail.com</div>
+                </div>
+              </a>
+              <a href="https://wa.me/91XXXXXXXXXX" class="contact-method" id="contact-whatsapp" target="_blank" rel="noopener">
+                <div class="contact-method-icon">↗</div>
+                <div>
+                  <div class="contact-method-label">WhatsApp</div>
+                  <div class="contact-method-value">Message me directly</div>
+                </div>
+              </a>
+              <a href="https://www.instagram.com/thevibescapturer" class="contact-method" id="contact-instagram" target="_blank" rel="noopener">
+                <div class="contact-method-icon">◈</div>
+                <div>
+                  <div class="contact-method-label">Instagram</div>
+                  <div class="contact-method-value">@thevibescapturer</div>
+                </div>
+              </a>
+              <a href="https://youtube.com/@starvlogss1235" class="contact-method" id="contact-youtube" target="_blank" rel="noopener">
+                <div class="contact-method-icon">▶</div>
+                <div>
+                  <div class="contact-method-label">YouTube</div>
+                  <div class="contact-method-value">@starvlogss1235</div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="contact-form fade-in" id="contact-form-card">
+            <form id="contact-form" onsubmit="submitContactForm(event)" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="contact-name">Name</label>
+                  <input type="text" id="contact-name" name="name" class="form-input" required autocomplete="name" placeholder="Your name" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="contact-email-input">Email</label>
+                  <input type="email" id="contact-email-input" name="email" class="form-input" required autocomplete="email" placeholder="your@email.com" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact-service">Service</label>
+                <select id="contact-service" name="service" class="form-select" required>
+                  <option value="">Select a service...</option>
+                  <option value="video-editing">Video Editing</option>
+                  <option value="photography">Photography</option>
+                  <option value="color-grading">Color Grading</option>
+                  <option value="social-reels">Social Media Reels</option>
+                  <option value="cinematography">Cinematography</option>
+                  <option value="vfx">VFX &amp; Motion Graphics</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact-message">Project Details</label>
+                <textarea id="contact-message" name="message" class="form-textarea" required placeholder="Tell me about your project and timeline..."></textarea>
+              </div>
+
+              <button type="submit" class="form-submit" id="form-submit-btn">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         FOOTER
+    ═══════════════════════════════════════════════════════════ -->
+    <footer>
+      <div class="container">
+        <div class="footer-center">
+          <a href="#home" class="nav-brand footer-brand-link">
+            <img src="assets/TvC Website Logo.png" alt="TheVibesCapturer" width="34" height="34" onerror="this.src='assets/TVC_logo.jpg'" />
+            <span class="brand-text">TvC</span>
+          </a>
+          <p class="footer-tagline">Just Capture Every Moments</p>
+          <div class="footer-socials">
+            <a href="https://www.instagram.com/thevibescapturer" class="social-link" target="_blank" rel="noopener" title="Instagram" id="footer-instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com/@starvlogss1235" class="social-link" target="_blank" rel="noopener" title="YouTube" id="footer-youtube">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-1.96C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.4 19.54C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+            </a>
+            <a href="mailto:thevibescapturer8k@gmail.com" class="social-link" title="Email" id="footer-email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </a>
+            <a href="https://wa.me/91XXXXXXXXXX" class="social-link" target="_blank" rel="noopener" title="WhatsApp" id="footer-whatsapp">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span>© <span id="footer-year">2024</span> TheVibesCapturer. All rights reserved.</span>
+          <span>Crafted for visual creators.</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         LIGHTBOX
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Media viewer" onclick="closeLightboxOnBg(event)">
+      <button class="lightbox-nav lightbox-prev" id="lightbox-prev" onclick="navigateLightbox(-1)" aria-label="Previous">‹</button>
+      <div class="lightbox-inner" id="lightbox-inner">
+        <div class="lightbox-media" id="lightbox-media"></div>
+        <div class="lightbox-info">
+          <div>
+            <div class="lightbox-title" id="lightbox-title"></div>
+            <div class="lightbox-desc" id="lightbox-desc"></div>
+          </div>
+          <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close viewer">✕</button>
+        </div>
+      </div>
+      <button class="lightbox-nav lightbox-next" id="lightbox-next" onclick="navigateLightbox(1)" aria-label="Next">›</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ADMIN OVERLAY
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="admin-overlay" id="admin-overlay" onclick="closeAdminOnBg(event)" role="dialog" aria-modal="true">
+      <div class="admin-login-modal" id="admin-login-modal" aria-labelledby="admin-login-title">
+        <div class="admin-login-icon">⬡</div>
+        <h2 id="admin-login-title">Admin Access</h2>
+        <p>Enter your password to manage portfolio content.</p>
+
+        <form class="admin-login-form" onsubmit="adminLogin(event)" novalidate>
+          <div class="login-error" id="login-error" role="alert">Incorrect password. Try again.</div>
+          <div class="form-group">
+            <label class="form-label" for="admin-password">Password</label>
+            <input type="password" id="admin-password" class="form-input" required placeholder="Enter admin password" autocomplete="current-password" />
+          </div>
+          <button type="submit" class="form-submit" id="admin-login-btn">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Admin Side Panel -->
+    <div class="admin-panel" id="admin-panel" role="complementary" aria-label="Admin Panel">
+      <div class="admin-panel-header">
+        <span class="admin-panel-title">Admin Panel</span>
+        <button class="admin-panel-close" onclick="closeAdminPanel()" aria-label="Close">✕</button>
+      </div>
+
+      <div class="admin-panel-body">
+        <div class="storage-stats" id="storage-stats">
+          <div class="storage-stats-title">Storage</div>
+          <div class="storage-bar"><div class="storage-bar-fill" id="storage-fill" style="width:0%"></div></div>
+          <div class="storage-numbers">
+            <span id="storage-used">0 MB used</span>
+            <span id="storage-mode-badge">Local Mode</span>
+          </div>
+        </div>
+
+        <div class="admin-stats-grid" id="admin-stats-grid">
+          <div class="admin-stat-chip"><span class="num" id="stat-total">0</span><span class="label">Total</span></div>
+          <div class="admin-stat-chip"><span class="num" id="stat-photos">0</span><span class="label">Photos</span></div>
+          <div class="admin-stat-chip"><span class="num" id="stat-videos">0</span><span class="label">Videos</span></div>
+          <div class="admin-stat-chip"><span class="num" id="stat-edited">0</span><span class="label">Edited</span></div>
+        </div>
+
+        <div class="admin-tabs" role="tablist">
+          <button class="admin-tab active" data-admin-tab="upload" role="tab" onclick="switchAdminTab('upload')">Upload</button>
+          <button class="admin-tab" data-admin-tab="manage" role="tab" onclick="switchAdminTab('manage')">Manage</button>
+          <button class="admin-tab" data-admin-tab="settings" role="tab" onclick="switchAdminTab('settings')">Settings</button>
+        </div>
+
+        <!-- Upload Tab -->
+        <div class="admin-tab-content active" id="tab-upload">
+          <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()"
+            ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+            <input type="file" id="file-input" multiple accept="image/*,video/*" onchange="handleFileSelect(event)" />
+            <div class="upload-zone-icon">↑</div>
+            <div class="upload-zone-text">Drop files here or click to browse</div>
+            <div class="upload-zone-hint">JPG, PNG, MP4, MOV · Max 500MB per file</div>
+          </div>
+
+          <div class="upload-preview" id="upload-preview"></div>
+
+          <div class="upload-form-fields" id="upload-form-fields" style="display:none">
+            <div class="form-group">
+              <label class="form-label" for="upload-title">Title</label>
+              <input type="text" id="upload-title" class="form-input" placeholder="e.g. Wedding Reel 2024" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="upload-category">Category</label>
+              <select id="upload-category" class="form-select">
+                <option value="photo">Photo</option>
+                <option value="video">Video</option>
+                <option value="edited">Edited Work</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="upload-desc">Description</label>
+              <textarea id="upload-desc" class="form-textarea" style="min-height:80px" placeholder="Brief description..."></textarea>
+            </div>
+            <div id="upload-progress-list"></div>
+            <button class="btn-primary" onclick="startUpload()" id="upload-submit-btn" style="width:100%; justify-content:center">Upload to Cloud</button>
+          </div>
+        </div>
+
+        <!-- Manage Tab -->
+        <div class="admin-tab-content" id="tab-manage">
+          <div class="admin-media-list" id="admin-media-list">
+            <div class="gallery-empty"><div class="empty-icon" style="font-size:2rem">◻</div><p>No files uploaded yet.</p></div>
+          </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="admin-tab-content" id="tab-settings">
+          <div class="form-group">
+            <label class="form-label">Storage Mode</label>
+            <div style="padding:12px; background:var(--clr-bg); border-radius:var(--radius-sm); border:1px solid var(--clr-border);">
+              <div style="font-weight:600; color:var(--clr-accent); margin-bottom:4px;" id="current-storage-mode">Local Mode (Testing)</div>
+              <div style="font-size:0.82rem; color:var(--clr-text-2);">Configure config.js to connect Backblaze B2 for permanent cloud storage.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Change Admin Password</label>
+            <input type="password" id="new-password" class="form-input" placeholder="New password" />
+            <button class="btn-secondary" style="margin-top:8px; width:100%; justify-content:center" onclick="changePassword()">Update Password</button>
+          </div>
+          <div class="form-group">
+            <button class="btn-secondary" style="width:100%; justify-content:center; border-color:var(--clr-error); color:var(--clr-error);" onclick="adminLogout()">Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="module" src="app.js"></script>
+    <script src="tvc3d.js"></script>
+  </body>
+</html>
