@@ -2132,3 +2132,12 @@ body.light-theme .field-media { background: #fdfdfd; }
 .lightbox-desc {
   font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-2); margin-top: 5px;
 }
+
+/* ================================================================
+   CINEMATIC SCROLL REVEAL ANIMATIONS
+================================================================ */
+.reveal-up { opacity: 0; transform: translateY(60px); transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.reveal-left { opacity: 0; transform: translateX(-60px); transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.reveal-right { opacity: 0; transform: translateX(60px); transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.reveal-zoom { opacity: 0; transform: scale(0.9); transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.reveal-up.revealed, .reveal-left.revealed, .reveal-right.revealed, .reveal-zoom.revealed { opacity: 1; transform: translate(0) scale(1); }

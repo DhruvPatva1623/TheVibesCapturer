@@ -322,7 +322,7 @@ function observeDynamicReveals() {
       }
     });
   }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-  document.querySelectorAll('.gallery-item[data-reveal]:not(.revealed)').forEach(el => io.observe(el));
+  document.querySelectorAll('.gallery-item[data-reveal]:not(.revealed), .reveal-up:not(.revealed), .reveal-left:not(.revealed), .reveal-right:not(.revealed), .reveal-zoom:not(.revealed)').forEach(el => io.observe(el));
 }
 
 // Filter pills (new design)

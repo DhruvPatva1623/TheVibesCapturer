@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
   <link rel="icon" type="image/png" href="assets/TvC Website Logo.png" />
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=6" />
   <script>
     if (localStorage.getItem('tvc_theme') === 'light') {
       document.documentElement.classList.add('light-theme');
@@ -176,7 +176,7 @@
 
     <!-- Main hero content -->
     <div class="hero-content hero-content--centered">
-      <div class="hero-text-wrap" data-reveal="slide-up">
+      <div class="hero-text-wrap reveal-up">
         <div class="hero-label">
           <span class="hl-line"></span>
           <span class="hl-text">CINEMATOGRAPHER • VIDEO EDITOR</span>
@@ -190,7 +190,7 @@
         </div>
       </div>
 
-      <div class="hero-cta" data-reveal>
+      <div class="hero-cta reveal-up" data-delay="200">
         <a href="#gallery" class="btn-primary magnetic">
           <span>View My Work</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -301,8 +301,8 @@
     <div class="film-strip-track" id="film-strip-1-2"></div>
   </div>
 
-  <!-- ═══ GALLERY / WORK ═══ -->
-  <section id="gallery" class="section gallery-section">
+  <!-- ═══ GALLERY SECTION ═══ -->
+  <section id="gallery" class="section gallery-section reveal-zoom">
     <div class="section-bg-text" aria-hidden="true" data-parallax-text>CAPTURE</div>
     <div class="container">
       <div class="section-head" data-reveal="slide-left">
@@ -335,8 +335,8 @@
   <!-- Timeline keyframe decoration -->
   <div class="timeline-deco" aria-hidden="true"><div class="timeline-deco-mid"></div></div>
 
-  <!-- ═══ REEL ═══ -->
-  <section id="reel" class="section reel-section">
+  <!-- ═══ REEL SECTION ═══ -->
+  <section id="reel" class="section reel-section reveal-up">
     <div class="reel-bg-text" aria-hidden="true">REEL</div>
     <!-- Waveform decoration -->
     <div class="waveform-deco" id="waveform-deco" aria-hidden="true"></div>
@@ -385,8 +385,8 @@
   <!-- Timeline keyframe decoration -->
   <div class="timeline-deco" aria-hidden="true"><div class="timeline-deco-mid"></div></div>
 
-  <!-- ═══ SERVICES ═══ -->
-  <section id="services" class="section services-section">
+  <!-- ═══ SERVICES SECTION ═══ -->
+  <section id="services" class="section services-section reveal-up">
     <div class="section-bg-text" aria-hidden="true" data-parallax-text>CREATE</div>
     <div class="container">
       <div class="section-head" data-reveal="slide-left">
@@ -450,8 +450,8 @@
   <!-- Timeline keyframe decoration -->
   <div class="timeline-deco" aria-hidden="true"><div class="timeline-deco-mid"></div></div>
 
-  <!-- ═══ CONTACT ═══ -->
-  <section id="contact" class="section contact-section">
+  <!-- ═══ CONTACT SECTION ═══ -->
+  <section id="contact" class="section contact-section reveal-up">
     <div class="section-bg-text" aria-hidden="true" data-parallax-text>CONNECT</div>
     <div class="container">
       <div class="section-head" data-reveal="slide-left">
@@ -731,6 +731,6 @@
   <script>window.studioLightsOn = true;</script>
   <script src="cinematic.js?v=4"></script>
   <!-- App logic (module) -->
-  <script type="module" src="app.js?v=14"></script>
+  <script type="module" src="app.js?v=15"></script>
 </body>
 </html>
