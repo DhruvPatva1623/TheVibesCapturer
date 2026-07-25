@@ -218,7 +218,10 @@ async function loadGallery(filter = "all") {
   // Render filters dynamically
   await renderGalleryFilters(items);
 
-  if (filter !== "all") {
+  if (filter === "recent") {
+    const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+    items = items.filter(i => i.timestamp >= oneWeekAgo);
+  } else if (filter !== "all") {
     items = items.filter(i => (i.category === filter || i.subsection === filter));
   }
 
@@ -286,6 +289,10 @@ function createGalleryItem(item, index) {
     <div class="gallery-overlay">
       <div class="gallery-overlay-type">${item.category || item.subsection || ""}</div>
       <div class="gallery-overlay-title">${escHtml(item.title || item.name || "")}</div>
+    </div>
+    <div class="editor-overlay">
+      <button class="editor-delete-btn" style="background:var(--white); color:var(--bg-base); margin-right:10px;" onclick="event.stopPropagation(); editMediaItem('${item.id}')">Edit</button>
+      <button class="editor-delete-btn" onclick="event.stopPropagation(); deleteMediaItem('${item.id}')">Delete</button>
     </div>
   `;
 
@@ -477,6 +484,7 @@ window.checkAdminPassword = function () {
     state.isAdmin = true;
     sessionStorage.setItem(state.adminSessionKey, "true");
     if (document.getElementById('admin-password')) document.getElementById('admin-password').value = '';
+    document.getElementById('editor-toggle-btn').style.display = 'flex';
     showAdminPanel();
     showToast("Welcome back, Admin!", "success");
   } else {
@@ -497,7 +505,14 @@ function showAdminPanel() {
   const adminContent = document.getElementById('admin-content');
   if (loginForm) loginForm.style.display = 'none';
   if (adminContent) adminContent.style.display = '';
+  document.getElementById('editor-toggle-btn').style.display = 'flex';
   refreshAdminPanel();
+}
+
+window.toggleEditorMode = function() {
+  document.body.classList.toggle('editor-mode-active');
+  const isActive = document.body.classList.contains('editor-mode-active');
+  showToast(isActive ? "Supreme Editor Mode ON" : "Editor Mode OFF", "success");
 }
 
 function refreshAdminPanel() {
@@ -509,6 +524,8 @@ window.adminLogout = function () {
   state.isAdmin = false;
   sessionStorage.removeItem(state.adminSessionKey);
   window.closeAdmin();
+  document.getElementById('editor-toggle-btn').style.display = 'none';
+  document.body.classList.remove('editor-mode-active');
   const loginForm = document.getElementById('admin-login-form');
   const adminContent = document.getElementById('admin-content');
   if (loginForm) loginForm.style.display = '';
