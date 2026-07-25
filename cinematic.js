@@ -493,7 +493,7 @@ window.addEventListener('load', function() {
                     toggleSwitch.style.background = 'var(--red)';
                     toggleSwitch.style.borderColor = 'var(--red)';
                     toggleKnob.style.background = 'var(--white)';
-                    toggleKnob.style.transform = 'translateX(18px)';
+                    toggleKnob.style.transform = 'translateX(26px)';
                 } else {
                     toggleSwitch.style.background = 'transparent';
                     toggleSwitch.style.borderColor = 'var(--border-2)';

@@ -191,8 +191,19 @@ export async function getAllMedia() {
 }
 
 export async function deleteMedia(docId, itemData) {
-  // If we ever implement Cloudinary delete API, we could do it here
   await deleteDoc(doc(db, "media", docId));
+}
+
+export async function softDeleteMedia(docId) {
+  await setDoc(doc(db, "media", docId), { deleted: true }, { merge: true });
+}
+
+export async function restoreMedia(docId) {
+  await setDoc(doc(db, "media", docId), { deleted: false }, { merge: true });
+}
+
+export async function updateMedia(docId, data) {
+  await setDoc(doc(db, "media", docId), data, { merge: true });
 }
 
 export async function getStorageStats() {

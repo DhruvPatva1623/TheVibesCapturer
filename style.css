@@ -2167,12 +2167,14 @@ body.editor-mode-active .gallery-item {
   opacity: 0; transition: opacity 0.3s; pointer-events: none;
 }
 body.editor-mode-active .editor-overlay { pointer-events: auto; opacity: 1; }
-.editor-delete-btn {
-  background: var(--red); color: var(--white);
+.editor-action-btn {
   border: none; padding: 10px 20px; border-radius: 4px;
-  font-family: var(--font-sans); font-size: 0.9rem;
+  font-family: var(--font-sans); font-size: 0.9rem; font-weight: bold;
   cursor: pointer; pointer-events: auto;
-  box-shadow: 0 4px 15px rgba(200,40,42,0.5);
-  transition: transform 0.2s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  transition: transform 0.2s, background 0.2s;
 }
-.editor-delete-btn:hover { transform: scale(1.1); }
+.editor-action-btn:hover { transform: scale(1.1); }
+.editor-edit-btn { background: #ffffff; color: #000000; margin-right: 10px; }
+.editor-delete-btn { background: #C8282A; color: #ffffff; }
+.editor-restore-btn { background: #3ecf6e; color: #ffffff; margin-right: 10px; }

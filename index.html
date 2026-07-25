@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
   <link rel="icon" type="image/png" href="assets/TvC Website Logo.png" />
-  <link rel="stylesheet" href="style.css?v=7" />
+  <link rel="stylesheet" href="style.css?v=8" />
   <script>
     if (localStorage.getItem('tvc_theme') === 'light') {
       document.documentElement.classList.add('light-theme');
@@ -583,8 +583,9 @@
           <div class="admin-stat"><span id="stat-links">0</span><small>Links</small></div>
         </div>
         <div class="admin-tabs">
-          <button class="admin-tab active" onclick="switchTab('upload',this)">Cloud Upload</button>
+          <button class="admin-tab" onclick="switchTab('upload',this)">Cloud Upload</button>
           <button class="admin-tab" onclick="switchTab('manage',this)">Manage Media</button>
+          <button class="admin-tab" onclick="switchTab('recycle',this)">Recycle Bin</button>
           <button class="admin-tab" onclick="switchTab('settings',this)">Settings</button>
         </div>
         <div class="admin-sidebar-footer">
@@ -683,6 +684,14 @@
           <div id="manage-grid" class="manage-grid"></div>
         </div>
 
+        <div id="tab-recycle" class="admin-tab-content" style="display:none">
+          <div class="admin-section-header">
+            <h3>Recycle Bin</h3>
+            <p>Recently deleted media. Restore or permanently delete.</p>
+          </div>
+          <div id="recycle-grid" class="manage-grid"></div>
+        </div>
+
         <div id="tab-settings" class="admin-tab-content" style="display:none">
           <div class="admin-section-header">
             <h3>System Settings</h3>
@@ -719,10 +728,10 @@
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
   <!-- Sleek Studio Light Toggle -->
-  <div id="studio-light-toggle" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; align-items: center; gap: 10px; cursor: pointer; opacity: 0.5; transition: opacity 0.3s; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.15em;">
+  <div id="studio-light-toggle" style="position: fixed; bottom: 30px; left: 30px; z-index: 9999; display: flex; align-items: center; gap: 12px; cursor: pointer; opacity: 0.8; transition: opacity 0.3s; font-family: var(--font-mono); font-size: 0.85rem; font-weight: bold; color: var(--text); text-transform: uppercase; letter-spacing: 0.15em;">
     <span>Studio Light</span>
-    <div id="light-toggle-switch" style="width: 36px; height: 18px; border-radius: 9px; border: 1px solid var(--border-2); position: relative; transition: all 0.3s;">
-      <div id="light-toggle-knob" style="width: 12px; height: 12px; border-radius: 50%; background: var(--text-2); position: absolute; top: 2px; left: 2px; transition: all 0.3s;"></div>
+    <div id="light-toggle-switch" style="width: 48px; height: 24px; border-radius: 12px; border: 2px solid var(--border-2); position: relative; transition: all 0.3s;">
+      <div id="light-toggle-knob" style="width: 16px; height: 16px; border-radius: 50%; background: var(--text-2); position: absolute; top: 2px; left: 2px; transition: all 0.3s;"></div>
     </div>
   </div>
 
@@ -734,8 +743,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <!-- Cinematic effects -->
   <script>window.studioLightsOn = true;</script>
-  <script src="cinematic.js?v=4"></script>
+  <script src="cinematic.js?v=6"></script>
   <!-- App logic (module) -->
-  <script type="module" src="app.js?v=17"></script>
+  <script type="module" src="app.js?v=20"></script>
 </body>
 </html>

@@ -8,10 +8,13 @@ import {
   uploadMedia,
   getAllMedia,
   deleteMedia,
+  softDeleteMedia,
+  restoreMedia,
+  updateMedia,
   getStorageStats,
   onProgress,
   saveExternalLink
-} from "./storage.js?v=3";
+} from "./storage.js?v=4";
 
 import CONFIG from "./config.js?v=3";
 
@@ -220,9 +223,11 @@ async function loadGallery(filter = "all") {
 
   if (filter === "recent") {
     const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-    items = items.filter(i => i.timestamp >= oneWeekAgo);
+    items = items.filter(i => i.uploadedAt && i.uploadedAt.toMillis && (i.uploadedAt.toMillis() >= oneWeekAgo) && !i.deleted);
   } else if (filter !== "all") {
-    items = items.filter(i => (i.category === filter || i.subsection === filter));
+    items = items.filter(i => (i.category === filter || i.subsection === filter) && !i.deleted);
+  } else {
+    items = items.filter(i => !i.deleted);
   }
 
   // Clear grid (keep empty placeholder)
@@ -693,19 +698,17 @@ window.submitUpload = async function () {
     if(progressFill) progressFill.style.width = `100%`;
     showToast("✅ All files uploaded to Cloud!", "success");
     
-    setTimeout(() => {
-      if(progressEl) progressEl.style.display = "none";
-    }, 2000);
-    
-    state.pendingFiles = [];
-    renderUploadPreviews();
-    
-    document.getElementById("upload-event").value = "";
-    document.getElementById("upload-category").value = "";
-    document.getElementById("upload-title").value = "";
-    
-    // Switch to manage media tab automatically
-    switchAdminTab('manage', document.querySelector('.admin-tab:nth-child(2)'));
+    let countdown = 5;
+    if(progressText) progressText.textContent = `Upload Complete! Redirecting to Work section in ${countdown}s...`;
+    const interval = setInterval(() => {
+      countdown--;
+      if(progressText) progressText.textContent = `Upload Complete! Redirecting to Work section in ${countdown}s...`;
+      if(countdown <= 0) {
+        clearInterval(interval);
+        window.location.hash = "#work";
+        window.location.reload();
+      }
+    }, 1000);
   }
   
   updateAdminStats();
@@ -724,85 +727,116 @@ function handleUploadProgress({ id, percent, status }) {
 // ADMIN — MANAGE MEDIA LIST
 // ═══════════════════════════════════════════════════════════
 async function renderAdminMediaList() {
-  const list = document.getElementById("admin-media-list");
-  
-  if (!list) {
-    // If the element doesn't exist (e.g. we replaced it with manage-grid), use that instead.
-    const manageGrid = document.getElementById("manage-grid");
-    if (!manageGrid) return;
-  }
+  const manageGrid = document.getElementById("manage-grid");
+  const recycleGrid = document.getElementById("recycle-grid");
+  if (!manageGrid || !recycleGrid) return;
   
   const items = await getAllMedia();
-  const targetContainer = document.getElementById("admin-media-list") || document.getElementById("manage-grid");
-  targetContainer.innerHTML = "";
+  manageGrid.innerHTML = "";
+  recycleGrid.innerHTML = "";
+
+  // Populate datalists for upload
+  const events = new Set();
+  const subSections = new Set();
+  const categories = new Set();
+  items.forEach(i => {
+    if(i.event) events.add(i.event);
+    if(i.subsection) subSections.add(i.subsection);
+    if(i.category) categories.add(i.category);
+  });
+  
+  const elEventList = document.getElementById("event-list");
+  if(elEventList) elEventList.innerHTML = Array.from(events).map(e => `<option value="${escHtml(e)}">`).join("");
+  const elSubList = document.getElementById("subsection-list");
+  if(elSubList) elSubList.innerHTML = Array.from(subSections).map(e => `<option value="${escHtml(e)}">`).join("");
+  const elCatList = document.getElementById("category-list");
+  if(elCatList) elCatList.innerHTML = Array.from(categories).map(e => `<option value="${escHtml(e)}">`).join("");
 
   if (!items.length) {
-    targetContainer.innerHTML = `<div class="gallery-empty">
-      <div class="empty-icon" style="font-size:2rem">📂</div>
-      <p>No files uploaded yet.</p>
-    </div>`;
+    manageGrid.innerHTML = `<div class="gallery-empty"><div class="empty-icon" style="font-size:2rem">📂</div><p>No files uploaded yet.</p></div>`;
     return;
   }
 
-  // Sort newest first
-  const sorted = [...items].sort(
-    (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)
-  );
-
+  const sorted = [...items].sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+  
   sorted.forEach((item) => {
     const el = document.createElement("div");
     el.className = "admin-media-item";
     el.id = `admin-item-${item.id}`;
     const isVideo = item.type && item.type.startsWith("video");
     const sizeStr = item.size ? formatBytes(item.size) : "—";
-    const dateStr = new Date(item.uploadedAt).toLocaleDateString("en-IN");
+    const dateStr = item.uploadedAt ? new Date(item.uploadedAt.toMillis ? item.uploadedAt.toMillis() : item.uploadedAt).toLocaleDateString("en-IN") : "";
+
+    let actionBtns = `
+      <button class="editor-action-btn editor-edit-btn" title="Edit" onclick="editMediaItem('${item.docId}')">✏️ Edit</button>
+      <button class="editor-action-btn editor-delete-btn" title="Delete" onclick="deleteMediaItem('${item.docId}')">🗑️ Delete</button>
+    `;
+    if (item.deleted) {
+      actionBtns = `
+        <button class="editor-action-btn editor-restore-btn" title="Restore" onclick="restoreMediaItem('${item.docId}')">♻️ Restore</button>
+        <button class="editor-action-btn editor-delete-btn" title="Permanent Delete" onclick="hardDeleteMediaItem('${item.docId}')">❌ Perm Delete</button>
+      `;
+    }
 
     el.innerHTML = `
       <div class="admin-media-thumb">
-        ${isVideo
-          ? `<video src="${item.url}" muted preload="metadata"></video>`
-          : `<img src="${item.url}" alt="${escHtml(item.title || item.name)}" loading="lazy" />`
-        }
+        ${isVideo ? `<video src="${item.url}" muted preload="metadata"></video>` : `<img src="${item.url}" alt="${escHtml(item.title || item.name)}" loading="lazy" />`}
       </div>
       <div class="admin-media-info">
         <div class="admin-media-name">${escHtml(item.title || item.name)}</div>
-        <div class="admin-media-meta">
-          <span class="badge badge-${item.category}">${item.category}</span>
-          &nbsp;${sizeStr} · ${dateStr}
-        </div>
+        <div class="admin-media-meta"><span class="badge badge-${item.category}">${item.category}</span>&nbsp;${sizeStr} · ${dateStr}</div>
       </div>
-      <div class="admin-media-actions">
-        <button class="admin-action-btn admin-action-edit" title="Edit" onclick="editMediaItem('${item.id}')">✏️</button>
-        <button class="admin-action-btn admin-action-delete" title="Delete" onclick="deleteMediaItem('${item.id}')">🗑️</button>
-      </div>
+      <div class="admin-media-actions">${actionBtns}</div>
     `;
-    list.appendChild(el);
+    
+    if (item.deleted) {
+      recycleGrid.appendChild(el);
+    } else {
+      manageGrid.appendChild(el);
+    }
   });
 }
 
-window.deleteMediaItem = async function (id) {
-  if (!confirm("Delete this file? This cannot be undone.")) return;
+window.deleteMediaItem = async function (docId) {
+  if (!confirm("Move this file to Recycle Bin?")) return;
   try {
-    await deleteMedia(id);
-    const el = document.getElementById(`admin-item-${id}`);
-    if (el) {
-      el.style.opacity = "0";
-      el.style.transform = "translateX(20px)";
-      el.style.transition = "all 0.3s ease";
-      setTimeout(() => el.remove(), 300);
-    }
+    await softDeleteMedia(docId);
+    showToast("🗑️ Moved to Recycle Bin.", "success");
+    renderAdminMediaList();
     loadGallery(state.currentFilter);
-    loadReelPlaylist();
     updateAdminStats();
-    showToast("🗑️ File deleted.", "success");
   } catch (err) {
     showToast(`❌ Delete failed: ${err.message}`, "error");
   }
 };
 
-window.editMediaItem = function (id) {
-  const items = getAllMedia();
-  const item = items.find((i) => i.id === id);
+window.restoreMediaItem = async function (docId) {
+  try {
+    await restoreMedia(docId);
+    showToast("♻️ File restored successfully.", "success");
+    renderAdminMediaList();
+    loadGallery(state.currentFilter);
+    updateAdminStats();
+  } catch (err) {
+    showToast(`❌ Restore failed: ${err.message}`, "error");
+  }
+};
+
+window.hardDeleteMediaItem = async function (docId) {
+  if (!confirm("Permanently delete this file? This CANNOT be undone.")) return;
+  try {
+    await deleteMedia(docId);
+    showToast("❌ File permanently deleted.", "success");
+    renderAdminMediaList();
+    updateAdminStats();
+  } catch (err) {
+    showToast(`❌ Delete failed: ${err.message}`, "error");
+  }
+};
+
+window.editMediaItem = async function (docId) {
+  const items = await getAllMedia();
+  const item = items.find((i) => i.docId === docId);
   if (!item) return;
 
   const newTitle = prompt("Edit title:", item.title || item.name);
@@ -810,7 +844,7 @@ window.editMediaItem = function (id) {
   const newDesc = prompt("Edit description:", item.description || "");
   if (newDesc === null) return;
 
-  updateMedia(id, { title: newTitle, description: newDesc });
+  await updateMedia(docId, { title: newTitle, description: newDesc });
   renderAdminMediaList();
   loadGallery(state.currentFilter);
   showToast("✅ Updated!", "success");
