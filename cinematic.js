@@ -304,9 +304,15 @@ window.addEventListener('load', function() {
     }
     cursorLoop();
 
-    document.querySelectorAll('a, button, .filter-pill, .reel-play-btn').forEach(function(el) {
-      el.addEventListener('mouseenter', function() { document.body.classList.add('cursor-hover'); });
-      el.addEventListener('mouseleave', function() { document.body.classList.remove('cursor-hover'); });
+    document.addEventListener('mouseover', function(e) {
+      if (e.target.closest('a, button, .filter-pill, .reel-play-btn, .gallery-item, .lb-admin-btn, .editor-action-btn')) {
+        document.body.classList.add('cursor-hover');
+      }
+    });
+    document.addEventListener('mouseout', function(e) {
+      if (e.target.closest('a, button, .filter-pill, .reel-play-btn, .gallery-item, .lb-admin-btn, .editor-action-btn')) {
+        document.body.classList.remove('cursor-hover');
+      }
     });
     document.addEventListener('mouseleave', function() { cursor.style.opacity = '0'; });
     document.addEventListener('mouseenter', function() { cursor.style.opacity = '1'; });

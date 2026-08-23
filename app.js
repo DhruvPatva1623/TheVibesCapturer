@@ -178,24 +178,39 @@ async function renderGalleryFilters(items) {
   const filterContainer = document.getElementById("gallery-filters");
   if (!filterContainer) return;
 
-  // Extract unique categories, ignoring empty ones
-  const categories = [...new Set(items.map(i => i.category || i.subsection).filter(Boolean))];
+  const activeItems = items.filter(i => !i.deleted);
   
-  // Only recreate if categories changed (to prevent rebinding clicks unnecessarily)
-  const currentCats = Array.from(filterContainer.querySelectorAll('.filter-pill'))
-                           .map(btn => btn.dataset.filter)
-                           .filter(f => f !== 'all');
-                           
-  if (categories.sort().join(',') === currentCats.sort().join(',')) return;
+  // Calculate item counts per category/subsection
+  const counts = {};
+  activeItems.forEach(i => {
+    const cat = (i.category || i.subsection || "general").toLowerCase();
+    counts[cat] = (counts[cat] || 0) + 1;
+  });
 
-  filterContainer.innerHTML = `<button class="filter-pill ${state.currentFilter === 'all' ? 'active' : ''}" data-filter="all">All</button>`;
+  const categories = Object.keys(counts);
+
+  filterContainer.innerHTML = "";
   
+  // All Pill
+  const allBtn = document.createElement("button");
+  allBtn.className = `filter-pill ${state.currentFilter === 'all' ? 'active' : ''}`;
+  allBtn.dataset.filter = 'all';
+  allBtn.innerHTML = `📁 ALL (${activeItems.length})`;
+  filterContainer.appendChild(allBtn);
+
+  // Category Pills with icons and counts
   categories.forEach(cat => {
     const btn = document.createElement("button");
     btn.className = `filter-pill ${state.currentFilter === cat ? 'active' : ''}`;
     btn.dataset.filter = cat;
-    // Capitalize first letter
-    btn.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+    
+    let icon = "📂";
+    if (cat.includes("photo")) icon = "📷";
+    if (cat.includes("video") || cat.includes("film") || cat.includes("reel")) icon = "🎬";
+    if (cat.includes("glimpse")) icon = "✨";
+    if (cat.includes("random")) icon = "🎨";
+
+    btn.innerHTML = `${icon} ${cat.toUpperCase()} (${counts[cat]})`;
     filterContainer.appendChild(btn);
   });
 
@@ -225,7 +240,7 @@ async function loadGallery(filter = "all") {
     const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
     items = items.filter(i => i.uploadedAt && i.uploadedAt.toMillis && (i.uploadedAt.toMillis() >= oneWeekAgo) && !i.deleted);
   } else if (filter !== "all") {
-    items = items.filter(i => (i.category === filter || i.subsection === filter) && !i.deleted);
+    items = items.filter(i => ((i.category || "").toLowerCase() === filter || (i.subsection || "").toLowerCase() === filter) && !i.deleted);
   } else {
     items = items.filter(i => !i.deleted);
   }
@@ -252,52 +267,82 @@ async function loadGallery(filter = "all") {
 
 function createGalleryItem(item, index) {
   const div = document.createElement("div");
-  div.className = "gallery-item";
+  const isVideo = item.type && item.type.startsWith("video");
+  const isLink = item.type === "link";
+
+  // Featured: every 1st item and every 7th item
+  const isFeatured = (index === 0 || index % 7 === 0);
+
+  let className = "gallery-item";
+  if (isFeatured) className += " gallery-item--featured";
+  if (isVideo) className += " gallery-item--video";
+  else if (isLink) className += " gallery-item--link";
+
+  div.className = className;
   div.setAttribute("role", "listitem");
   div.setAttribute("tabindex", "0");
   div.setAttribute("data-reveal", "mask-sweep");
-  div.dataset.id = item.id;
-  div.onclick = () => openLightbox(index);
+  div.title = "Click to open";
+
+  div.addEventListener("click", function (e) {
+    if (e.target.closest(".editor-action-btn")) return;
+    openLightbox(index);
+  });
   div.onkeydown = (e) => e.key === "Enter" && openLightbox(index);
 
-  const isVideo = item.type && item.type.startsWith("video");
-  const isLink = item.type === "link";
   const mediaSrc = item.url;
-  
-  // Try to extract YouTube thumbnail if it's a youtube link
+  const folderName = item.event || item.category || item.subsection || "General";
+  const titleText = item.title || item.name || "Visual Capture";
+  const descText = item.description || (isVideo ? "Video Clip" : isLink ? "External Media" : "Photography");
+  const itemId = item.docId || item.id;
+
+  // YouTube thumbnail extraction
   let thumbSrc = mediaSrc;
   if (isLink && (mediaSrc.includes("youtu") || mediaSrc.includes("youtube.com"))) {
     let vidId = "";
-    if (mediaSrc.includes("v=")) {
-      vidId = mediaSrc.split("v=")[1].split("&")[0];
-    } else if (mediaSrc.includes("youtu.be/")) {
-      vidId = mediaSrc.split("youtu.be/")[1].split("?")[0];
-    } else if (mediaSrc.includes("/shorts/")) {
-      vidId = mediaSrc.split("/shorts/")[1].split("?")[0];
-    }
-    
-    if (vidId) {
-      // hqdefault guarantees a thumbnail exists for all videos including Shorts
-      thumbSrc = `https://img.youtube.com/vi/${vidId}/hqdefault.jpg`;
-    }
+    if (mediaSrc.includes("v=")) vidId = mediaSrc.split("v=")[1].split("&")[0];
+    else if (mediaSrc.includes("youtu.be/")) vidId = mediaSrc.split("youtu.be/")[1].split("?")[0];
+    else if (mediaSrc.includes("/shorts/")) vidId = mediaSrc.split("/shorts/")[1].split("?")[0];
+    if (vidId) thumbSrc = `https://img.youtube.com/vi/${vidId}/hqdefault.jpg`;
   }
 
+  // Recent badge — uploaded within last 7 days
+  const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+  const uploadedMs = item.uploadedAt && item.uploadedAt.toMillis ? item.uploadedAt.toMillis() : (item.uploadedAt ? new Date(item.uploadedAt).getTime() : 0);
+  const isNew = uploadedMs >= oneWeekAgo;
+
   div.innerHTML = `
-    <div class="gallery-item-type-badge" aria-label="${isVideo ? "Video" : isLink ? "Link" : "Image"}">
-      ${isVideo ? "▶" : isLink ? "🔗" : "🖼"}
-    </div>
-    ${
-      isVideo
+    <div class="gallery-media-wrapper">
+      ${isNew ? `<div class="media-new-badge">✦ New</div>` : ""}
+      <div class="media-badge-container">
+        <span class="media-type-badge">${isVideo ? "🎬 Video" : isLink ? "▶ Link" : "📷 Photo"}</span>
+        <span class="media-folder-badge">📂 ${escHtml(folderName)}</span>
+      </div>
+      ${isVideo
         ? `<video src="${mediaSrc}" muted playsinline preload="metadata" style="pointer-events:none"></video>`
-        : `<img src="${isLink ? thumbSrc : mediaSrc}" alt="${escHtml(item.title || item.name)}" loading="lazy" onerror="this.src='assets/TVC_logo.jpg'" />`
-    }
-    <div class="gallery-overlay">
-      <div class="gallery-overlay-type">${item.category || item.subsection || ""}</div>
-      <div class="gallery-overlay-title">${escHtml(item.title || item.name || "")}</div>
+        : `<img src="${isLink ? thumbSrc : mediaSrc}" alt="${escHtml(titleText)}" loading="lazy" onerror="this.src='assets/TVC_logo.jpg'" />`
+      }
+      ${(isVideo || isLink) ? `
+        <div class="gallery-play-btn" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      ` : ""}
+      <div class="gallery-overlay">
+        <div class="gallery-overlay-title">${escHtml(titleText)}</div>
+        <div class="gallery-overlay-type">${isVideo ? "🎬 Video" : isLink ? "▶ Linked" : "📷 Photo"} · ${escHtml(item.subsection || item.event || "")}</div>
+      </div>
+      <div class="editor-overlay">
+        <button class="editor-action-btn editor-edit-btn"
+          onclick="event.stopPropagation(); editMediaItem('${itemId}')">✏️ Edit</button>
+        <button class="editor-action-btn editor-move-btn"
+          onclick="event.stopPropagation(); moveMediaItem('${itemId}')">📁 Move</button>
+        <button class="editor-action-btn editor-delete-btn"
+          onclick="event.stopPropagation(); deleteMediaItem('${itemId}')">🗑️ Del</button>
+      </div>
     </div>
-    <div class="editor-overlay">
-      <button class="editor-delete-btn" style="background:var(--white); color:var(--bg-base); margin-right:10px;" onclick="event.stopPropagation(); editMediaItem('${item.id}')">Edit</button>
-      <button class="editor-delete-btn" onclick="event.stopPropagation(); deleteMediaItem('${item.id}')">Delete</button>
+    <div class="gallery-card-info">
+      <div class="gallery-card-title">${escHtml(titleText)}</div>
+      <div class="gallery-card-subtitle">${escHtml(descText)}</div>
     </div>
   `;
 
@@ -396,6 +441,7 @@ window.openLightbox = function (index) {
 window.closeLightbox = function () {
   const lb = document.getElementById("lightbox");
   lb.classList.remove("open");
+  lb.classList.remove("max-preview");
   document.body.style.overflow = "";
   // Clear innerHTML to destroy iframes and video tags so sound stops
   const media = document.getElementById("lightbox-media");
@@ -403,13 +449,33 @@ window.closeLightbox = function () {
 };
 
 window.closeLightboxOnBg = function (e) {
-  if (e.target === document.getElementById("lightbox")) closeLightbox();
+  const lb = document.getElementById("lightbox");
+  if (e.target === lb || e.target === document.querySelector(".lightbox-content")) {
+    closeLightbox();
+  }
 };
 
 window.navigateLightbox = function (dir) {
   const total = state.lightboxItems.length;
   state.lightboxIndex = (state.lightboxIndex + dir + total) % total;
   renderLightbox();
+};
+
+window.toggleMaxPreview = function () {
+  const lb = document.getElementById("lightbox");
+  if (!lb) return;
+  const isMax = lb.classList.toggle("max-preview");
+  const icon = document.getElementById("lb-max-icon");
+  const btn = document.getElementById("lightbox-max-btn");
+  if (icon) icon.textContent = isMax ? "🗗" : "⛶";
+  if (btn) btn.classList.toggle("active-max", isMax);
+  showToast(isMax ? "⛶ Max Preview Mode Enabled" : "Exit Max Preview", "info");
+};
+
+window.toggleImageZoom = function (e) {
+  if (e.target && e.target.tagName === "IMG") {
+    e.target.classList.toggle("zoomed");
+  }
 };
 
 function renderLightbox() {
@@ -435,11 +501,43 @@ function renderLightbox() {
     media.innerHTML = `<iframe style="width:90vw; height:calc(90vw * 9 / 16); max-height:80vh; max-width:calc(80vh * 16 / 9); border-radius:8px; border:none; box-shadow: 0 20px 60px rgba(0,0,0,0.8);" src="https://www.youtube.com/embed/${vidId}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   } else {
     // Standard image or non-YouTube link fallback
-    media.innerHTML = `<img src="${item.url}" alt="${escHtml(item.title || item.name)}" style="max-width:100%; max-height:85vh; object-fit:contain; border-radius:8px;" onerror="this.src='assets/TVC_logo.jpg'" />`;
+    media.innerHTML = `<img src="${item.url}" alt="${escHtml(item.title || item.name)}" style="max-width:100%; max-height:85vh; object-fit:contain; border-radius:8px;" onerror="this.src='assets/TVC_logo.jpg'" title="Click image to Zoom In / Zoom Out" />`;
   }
 
-  document.getElementById("lightbox-title").textContent = item.title || item.name;
+  // Update Full-Res link
+  const fullresLink = document.getElementById("lightbox-fullres-link");
+  if (fullresLink) {
+    fullresLink.href = item.url;
+  }
+
+  const catEl = document.getElementById("lightbox-category");
+  if (catEl) {
+    const folder = item.category || item.subsection || "General";
+    catEl.textContent = `📂 ${folder.toUpperCase()}`;
+  }
+
+  document.getElementById("lightbox-title").textContent = item.title || item.name || "Visual Capture";
   document.getElementById("lightbox-desc").textContent = item.description || "";
+
+  // Render Admin Bar inside Lightbox if Admin Mode is active
+  const adminBar = document.getElementById("lightbox-admin-bar");
+  if (adminBar) {
+    const itemId = item.docId || item.id;
+    if (state.isAdmin) {
+      adminBar.style.display = "flex";
+      adminBar.innerHTML = `
+        <button class="lb-admin-btn lb-edit-btn" onclick="editMediaItem('${itemId}')">✏️ Edit Details</button>
+        <button class="lb-admin-btn lb-folder-btn" onclick="moveMediaItem('${itemId}')">📁 Move Folder</button>
+        <button class="lb-admin-btn lb-delete-btn" onclick="deleteMediaItem('${itemId}')">🗑️ Delete</button>
+        <button class="lb-admin-btn lb-copy-btn" onclick="copyMediaLink('${item.url}')">🔗 Copy Link</button>
+      `;
+    } else {
+      adminBar.style.display = "flex";
+      adminBar.innerHTML = `
+        <button class="lb-admin-btn lb-copy-btn" onclick="copyMediaLink('${item.url}')">🔗 Copy Link</button>
+      `;
+    }
+  }
 
   // Show/hide nav buttons
   document.getElementById("lightbox-prev").style.display =
@@ -797,14 +895,25 @@ async function renderAdminMediaList() {
   });
 }
 
-window.deleteMediaItem = async function (docId) {
-  if (!confirm("Move this file to Recycle Bin?")) return;
+window.deleteMediaItem = async function (identifier) {
+  const items = await getAllMedia();
+  const item = items.find((i) => i.docId === identifier || i.id === identifier);
+  if (!item) {
+    showToast("⚠️ Item not found", "error");
+    return;
+  }
+  const targetDocId = item.docId;
+  if (!confirm(`Move "${item.title || item.name}" to Recycle Bin?`)) return;
   try {
-    await softDeleteMedia(docId);
+    await softDeleteMedia(targetDocId);
     showToast("🗑️ Moved to Recycle Bin.", "success");
-    renderAdminMediaList();
-    loadGallery(state.currentFilter);
-    updateAdminStats();
+    try { renderAdminMediaList(); } catch(e){}
+    try { updateAdminStats(); } catch(e){}
+    await loadGallery(state.currentFilter);
+    const lb = document.getElementById("lightbox");
+    if (lb && lb.classList.contains("open")) {
+      closeLightbox();
+    }
   } catch (err) {
     showToast(`❌ Delete failed: ${err.message}`, "error");
   }
@@ -814,9 +923,9 @@ window.restoreMediaItem = async function (docId) {
   try {
     await restoreMedia(docId);
     showToast("♻️ File restored successfully.", "success");
-    renderAdminMediaList();
+    try { renderAdminMediaList(); } catch(e){}
+    try { updateAdminStats(); } catch(e){}
     loadGallery(state.currentFilter);
-    updateAdminStats();
   } catch (err) {
     showToast(`❌ Restore failed: ${err.message}`, "error");
   }
@@ -827,27 +936,87 @@ window.hardDeleteMediaItem = async function (docId) {
   try {
     await deleteMedia(docId);
     showToast("❌ File permanently deleted.", "success");
-    renderAdminMediaList();
-    updateAdminStats();
+    try { renderAdminMediaList(); } catch(e){}
+    try { updateAdminStats(); } catch(e){}
   } catch (err) {
     showToast(`❌ Delete failed: ${err.message}`, "error");
   }
 };
 
-window.editMediaItem = async function (docId) {
+window.editMediaItem = async function (identifier) {
   const items = await getAllMedia();
-  const item = items.find((i) => i.docId === docId);
+  const item = items.find((i) => i.docId === identifier || i.id === identifier);
+  if (!item) {
+    showToast("⚠️ Item not found", "error");
+    return;
+  }
+
+  const targetDocId = item.docId;
+  const currentTitle = item.title || item.name || "";
+  const currentDesc = item.description || "";
+  const currentCategory = item.category || item.subsection || "General";
+
+  const newTitle = prompt("Edit Title:", currentTitle);
+  if (newTitle === null) return;
+  const newDesc = prompt("Edit Subtitle / Description:", currentDesc);
+  if (newDesc === null) return;
+  const newCat = prompt("Edit Folder / Category (e.g. glimpse, randoms, films):", currentCategory);
+  if (newCat === null) return;
+
+  try {
+    await updateMedia(targetDocId, { 
+      title: newTitle.trim(), 
+      description: newDesc.trim(),
+      category: newCat.trim().toLowerCase(),
+      subsection: newCat.trim().toLowerCase()
+    });
+    showToast("✅ Item updated!", "success");
+    try { renderAdminMediaList(); } catch(e){}
+    await loadGallery(state.currentFilter);
+    const lb = document.getElementById("lightbox");
+    if (lb && lb.classList.contains("open")) {
+      renderLightbox();
+    }
+  } catch (err) {
+    showToast(`❌ Update failed: ${err.message}`, "error");
+  }
+};
+
+window.moveMediaItem = async function (identifier) {
+  const items = await getAllMedia();
+  const item = items.find((i) => i.docId === identifier || i.id === identifier);
   if (!item) return;
 
-  const newTitle = prompt("Edit title:", item.title || item.name);
-  if (newTitle === null) return;
-  const newDesc = prompt("Edit description:", item.description || "");
-  if (newDesc === null) return;
+  const targetDocId = item.docId;
+  const currentFolder = item.category || item.subsection || "General";
+  const newCat = prompt(`Move "${item.title || item.name}" to folder/category:`, currentFolder);
+  
+  if (!newCat || !newCat.trim()) return;
 
-  await updateMedia(docId, { title: newTitle, description: newDesc });
-  renderAdminMediaList();
-  loadGallery(state.currentFilter);
-  showToast("✅ Updated!", "success");
+  try {
+    await updateMedia(targetDocId, { 
+      category: newCat.trim().toLowerCase(),
+      subsection: newCat.trim().toLowerCase()
+    });
+    showToast(`📁 Moved to "${newCat.trim().toLowerCase()}"!`, "success");
+    try { renderAdminMediaList(); } catch(e){}
+    await loadGallery(state.currentFilter);
+    const lb = document.getElementById("lightbox");
+    if (lb && lb.classList.contains("open")) {
+      renderLightbox();
+    }
+  } catch (err) {
+    showToast(`❌ Move failed: ${err.message}`, "error");
+  }
+};
+
+window.copyMediaLink = function(url) {
+  if (!url) return;
+  navigator.clipboard.writeText(url).then(() => {
+    showToast("📋 Direct media link copied!", "success");
+  }).catch(() => {
+    showToast("❌ Could not copy link", "error");
+  });
 };
 
 // ═══════════════════════════════════════════════════════════

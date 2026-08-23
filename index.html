@@ -65,16 +65,6 @@
         24 FPS <span class="hud-sep">|</span> 4K DCI
       </div>
     </div>
-    
-    <div class="mobile-nav" id="mobile-nav">
-      <div class="mobile-nav-inner">
-        <a href="#gallery" onclick="toggleMobileNav()">Work</a>
-        <a href="#reel" onclick="toggleMobileNav()">Reel</a>
-        <a href="#services" onclick="toggleMobileNav()">Services</a>
-        <a href="#contact" onclick="toggleMobileNav()">Contact</a>
-        <a href="fields.html" class="nav-highlight">Fields</a>
-      </div>
-    </div>
 
   <!-- ═══ LOADER ═══ -->
   <div id="loader" aria-label="Loading" role="status">
@@ -306,13 +296,13 @@
     <div class="section-bg-text" aria-hidden="true" data-parallax-text>CAPTURE</div>
     <div class="container">
       <div class="section-head" data-reveal="slide-left">
-        <div class="section-tag">/ 01 — Work</div>
-        <h2 class="section-title">Selected<br><em>Work</em></h2>
-        <p class="section-sub">A curated selection of visual stories — from lens to screen.</p>
+        <div class="section-tag">/ 01 — WORK ARCHIVE &amp; FOLDERS</div>
+        <h2 class="section-title">Visual<br><em>Portfolio</em></h2>
+        <p class="section-sub">A structured collection of cinematic stories, photography &amp; short films — organized by folder.</p>
       </div>
 
       <div class="gallery-filters" id="gallery-filters" data-reveal="slide-right">
-        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill active" data-filter="all">📁 All Works</button>
         <button class="filter-pill" data-filter="photo">Photos</button>
         <button class="filter-pill" data-filter="video">Videos</button>
         <button class="filter-pill" data-filter="edited">Edits</button>
@@ -709,17 +699,26 @@
       </div>
     </div>
   </div>
-
   <!-- ═══ LIGHTBOX ═══ -->
   <div id="lightbox" class="lightbox" onclick="closeLightboxOnBg(event)">
+    <div class="lightbox-top-bar">
+      <button class="lb-top-btn" id="lightbox-max-btn" onclick="toggleMaxPreview()" title="Maximize Preview (Full Screen)">
+        <span id="lb-max-icon">⛶</span> Max Preview
+      </button>
+      <a class="lb-top-btn" id="lightbox-fullres-link" href="#" target="_blank" rel="noopener" title="Open Original Full-Res Image">
+        ↗ Full-Res
+      </a>
+      <button class="lightbox-close-btn" onclick="closeLightbox()" title="Close Viewer (Esc)">✕</button>
+    </div>
     <div class="lightbox-content">
-      <button class="lightbox-close" onclick="closeLightbox()">×</button>
-      <button id="lightbox-prev" class="lightbox-prev" onclick="navigateLightbox(-1)">‹</button>
-      <button id="lightbox-next" class="lightbox-next" onclick="navigateLightbox(1)">›</button>
-      <div id="lightbox-media" class="lightbox-media-container"></div>
-      <div class="lightbox-info">
+      <button id="lightbox-prev" class="lightbox-prev" onclick="navigateLightbox(-1)" title="Previous (Left Arrow)">‹</button>
+      <button id="lightbox-next" class="lightbox-next" onclick="navigateLightbox(1)" title="Next (Right Arrow)">›</button>
+      <div id="lightbox-media" class="lightbox-media-container" onclick="toggleImageZoom(event)"></div>
+      <div class="lightbox-info" id="lightbox-info">
+        <div id="lightbox-category" class="lightbox-category-tag"></div>
         <div id="lightbox-title" class="lightbox-title"></div>
         <div id="lightbox-desc" class="lightbox-desc"></div>
+        <div id="lightbox-admin-bar" class="lightbox-admin-bar"></div>
       </div>
     </div>
   </div>
