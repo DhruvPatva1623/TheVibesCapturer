@@ -637,8 +637,8 @@
               <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                 <label>Target Cloud:</label>
                 <select id="upload-cloud-target" style="padding:5px; border-radius:4px; background:var(--bg-base); color:var(--text); border:1px solid var(--border);">
-                  <option value="cloudinary" selected>Cloudinary (Free Storage)</option>
-                  <option value="firebase">Firebase Storage (5GB Free)</option>
+                  <option value="cloudinary" selected>Cloudinary (100% Free - No Credit Card Needed)</option>
+                  <option value="firebase">Firebase Storage (Requires Setup)</option>
                 </select>
               </div>
             </div>
@@ -663,6 +663,7 @@
               <div id="progress-fill" style="height: 100%; width: 0%; background: var(--red); transition: width 0.3s ease; box-shadow: 0 0 15px var(--red);"></div>
             </div>
             <div style="margin-top: 15px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em;">Please wait while your media is saved to the cloud.</div>
+            <button type="button" onclick="cancelCurrentUpload()" style="margin-top: 20px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--text-2); padding: 8px 18px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer; transition: all 0.2s;" onhover="this.style.borderColor='var(--red)'">CANCEL UPLOAD</button>
           </div>
         </div>
 

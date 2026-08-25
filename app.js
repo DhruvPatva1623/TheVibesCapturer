@@ -13,8 +13,9 @@ import {
   updateMedia,
   getStorageStats,
   onProgress,
-  saveExternalLink
-} from "./storage.js?v=4";
+  saveExternalLink,
+  cancelActiveUpload
+} from "./storage.js?v=5";
 
 import CONFIG from "./config.js?v=3";
 
@@ -818,8 +819,18 @@ function handleUploadProgress({ id, percent, status }) {
   const progressFill = document.getElementById("progress-fill");
   const progressText = document.getElementById("progress-text");
   if (progressFill) progressFill.style.width = `${percent}%`;
-  if (progressText && status === "uploading") progressText.textContent = `Uploading... ${percent}%`;
+  if (progressText) {
+    if (status === "uploading") progressText.textContent = `Uploading... ${percent}%`;
+    else if (status === "error") progressText.textContent = `Upload Failed!`;
+  }
 }
+
+window.cancelCurrentUpload = function() {
+  cancelActiveUpload();
+  const progressEl = document.getElementById("upload-progress");
+  if (progressEl) progressEl.style.display = "none";
+  showToast("🚫 Upload canceled.", "info");
+};
 
 // ═══════════════════════════════════════════════════════════
 // ADMIN — MANAGE MEDIA LIST

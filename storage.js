@@ -30,6 +30,15 @@ function emitProgress(id, percent, status) {
   progressCallbacks.forEach((cb) => cb({ id, percent, status }));
 }
 
+let currentUploadTask = null;
+
+export function cancelActiveUpload() {
+  if (currentUploadTask && typeof currentUploadTask.cancel === "function") {
+    try { currentUploadTask.cancel(); } catch(e) {}
+    currentUploadTask = null;
+  }
+}
+
 // ─── Firebase Storage Upload ────────────────────────────────────────────────
 async function uploadToFirebase(file, metadata) {
   return new Promise((resolve, reject) => {
@@ -37,38 +46,71 @@ async function uploadToFirebase(file, metadata) {
     const fileName = `${id}_${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
     const storageRef = ref(firebaseStorage, `media/${fileName}`);
 
+    let bytesTransferredCheck = 0;
     const uploadTask = uploadBytesResumable(storageRef, file);
+    currentUploadTask = uploadTask;
+
+    // Safety timeout: if 0 bytes uploaded after 12 seconds, handle CORS / Security Rules block
+    const progressCheckTimer = setTimeout(() => {
+      if (bytesTransferredCheck === 0) {
+        try { uploadTask.cancel(); } catch(e) {}
+        currentUploadTask = null;
+        emitProgress(id, 0, "error");
+        reject(new Error("Firebase Storage upload timed out at 0%. This is caused by missing CORS rules on your Firebase Storage bucket or restrictive Security Rules. Please see CORS setup instructions or select Cloudinary."));
+      }
+    }, 12000);
 
     uploadTask.on('state_changed', 
       (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        bytesTransferredCheck = snapshot.bytesTransferred;
+        const progress = snapshot.totalBytes > 0 
+          ? (snapshot.bytesTransferred / snapshot.totalBytes) * 100 
+          : 0;
         emitProgress(id, Math.round(progress), "uploading");
       }, 
       (error) => {
+        clearTimeout(progressCheckTimer);
+        currentUploadTask = null;
         emitProgress(id, 0, "error");
-        reject(error);
+
+        let userMsg = error.message;
+        if (error.code === 'storage/unauthorized') {
+          userMsg = "Permission denied: Firebase Storage rules restrict write access.";
+        } else if (error.code === 'storage/canceled') {
+          userMsg = "Upload canceled or timed out due to CORS/network block.";
+        } else if (error.code === 'storage/unknown' || (error.message && error.message.includes('CORS'))) {
+          userMsg = "CORS Error: Firebase Storage bucket lacks CORS headers for web uploads.";
+        }
+        reject(new Error(userMsg));
       }, 
       async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        
-        const item = {
-          id,
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          event: metadata.event || "General",
-          subsection: metadata.subsection || "photos",
-          category: metadata.category || "",
-          title: metadata.title || file.name,
-          url: downloadURL,
-          uploadedAt: serverTimestamp(),
-          storageTarget: "firebase",
-        };
+        clearTimeout(progressCheckTimer);
+        currentUploadTask = null;
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          
+          const item = {
+            id,
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            event: metadata.event || "General",
+            subsection: metadata.subsection || "photos",
+            category: metadata.category || "",
+            title: metadata.title || file.name,
+            url: downloadURL,
+            uploadedAt: serverTimestamp(),
+            storageTarget: "firebase",
+          };
 
-        // Save metadata to Firestore
-        await addDoc(collection(db, "media"), item);
-        emitProgress(id, 100, "done");
-        resolve(item);
+          // Save metadata to Firestore
+          await addDoc(collection(db, "media"), item);
+          emitProgress(id, 100, "done");
+          resolve(item);
+        } catch (err) {
+          emitProgress(id, 0, "error");
+          reject(err);
+        }
       }
     );
   });
@@ -91,8 +133,8 @@ async function uploadToCloudinary(file, metadata) {
     formData.append("upload_preset", uploadPreset);
 
     // Determine the resource type for Cloudinary API URL
-    const isVideo = file.type.startsWith("video/");
-    const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/${isVideo ? 'video' : 'image'}/upload`;
+    const resourceType = file.type.startsWith("video/") ? "video" : (file.type.startsWith("image/") ? "image" : "auto");
+    const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
 
     const xhr = new XMLHttpRequest();
     
